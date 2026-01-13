@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+const getBackendUrl = (path: string) => {
+  const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+  return `${BACKEND_URL}/api/auth/${path}`;
+};
+
 export async function GET(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const awaitedParams = await params;
   const path = awaitedParams.path.join('/');
-  const backendUrl = `http://localhost:8000/api/auth/${path}`;
+  const backendUrl = getBackendUrl(path);
 
   try {
     const response = await fetch(backendUrl, {
@@ -48,7 +53,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const awaitedParams = await params;
   const path = awaitedParams.path.join('/');
-  const backendUrl = `http://localhost:8000/api/auth/${path}`;
+  const backendUrl = getBackendUrl(path);
 
   try {
     const body = await request.json();
@@ -84,8 +89,6 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const res = Response.json({ error: 'Proxy error', details: (error as Error).message }, { status: 500 });
 
     // Add CORS headers
-    res.headers.set('Access-Control-Allow-Origin', '*');
-    res.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     return res;
@@ -95,7 +98,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const awaitedParams = await params;
   const path = awaitedParams.path.join('/');
-  const backendUrl = `http://localhost:8000/api/auth/${path}`;
+  const backendUrl = getBackendUrl(path);
 
   try {
     const body = await request.json();
@@ -142,7 +145,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const awaitedParams = await params;
   const path = awaitedParams.path.join('/');
-  const backendUrl = `http://localhost:8000/api/auth/${path}`;
+  const backendUrl = getBackendUrl(path);
 
   try {
     const response = await fetch(backendUrl, {
