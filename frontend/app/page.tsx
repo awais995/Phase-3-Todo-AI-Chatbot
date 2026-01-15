@@ -7,25 +7,15 @@ import DashboardContent from '@/components/dashboard/home-content';
 
 export default function Home() {
   const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated} = useAuth();
 
   useEffect(() => {
     // If authenticated, redirect to tasks page
-    if (!isLoading && isAuthenticated) {
+    if (isAuthenticated) {
       router.replace('/tasks');
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, router]);
 
-  // Show loading state while checking auth status
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <p className="text-lg">Loading...</p>
-        </div>
-      </div>
-    );
-  }
 
   // If authenticated, we should have redirected, but if for some reason we're still here
   if (isAuthenticated) {

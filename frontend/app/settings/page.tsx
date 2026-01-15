@@ -15,7 +15,8 @@ import { Moon, Sun, User, Lock, Bell, Save } from 'lucide-react';
 export default function SettingsPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { theme, setTheme } = useTheme();
-  const { user, isLoading: isAuthLoading } = useAuth();
+  const { user } = useAuth();
+  const [isMounted, setIsMounted] = useState(false);
   const [profile, setProfile] = useState({
     name: '',
     email: '',
@@ -28,6 +29,7 @@ export default function SettingsPage() {
   });
 
   useEffect(() => {
+    setIsMounted(true);
     if (user) {
       // Set profile with actual user data from auth context
       setProfile({
@@ -59,6 +61,15 @@ export default function SettingsPage() {
     // Handle notification settings save logic
     console.log('Notification settings saved:', notifications);
   };
+
+  // Prevent hydration mismatch by only rendering after mount
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -95,15 +106,7 @@ export default function SettingsPage() {
                 Manage your account settings and preferences
               </p>
             </div>
-
-            {isAuthLoading ? (
-              <div className="flex justify-center items-center h-64">
-                <div className="text-center">
-                  <p className="text-lg">Loading profile information...</p>
-                </div>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Profile Settings */}
                 <Card>
                   <CardHeader>
@@ -318,7 +321,6 @@ export default function SettingsPage() {
                   </CardContent>
                 </Card>
               </div>
-            )}
           </div>
         </main>
       </div>

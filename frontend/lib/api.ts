@@ -182,7 +182,8 @@ class ApiClient {
           toast.error('Network error. Please check your internet connection and try again.');
         } else if (error.name === 'AbortError') {
           // Timeout error
-          toast.error('Request timed out. Please try again.');
+          console.warn(`Request timed out after 5 seconds: ${endpoint}`);
+          toast.error('Request timed out. The server might be slow to respond.');
           throw new Error('Request timeout');
         } else if (error.message === 'Offline') {
           // Already handled above, but included for completeness
