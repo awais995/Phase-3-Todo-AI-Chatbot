@@ -30,13 +30,16 @@ export default function TasksContent() {
   }>({});
   const mainContentRef = useRef<HTMLDivElement>(null);
   const fetchCalledRef = useRef(false); // Ref to track if fetch has been called
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, isLoading: authIsLoading } = useAuth();
 
   // Listen for the custom event to open the add task form
   useEffect(() => {
-    // Check if user is authenticated before proceeding
     // Only redirect to login if we've finished loading and user is definitely not authenticated
-    if (isAuthenticated && user && user.id) {
+    // During loading, we should not redirect
+    if (!authIsLoading && !isAuthenticated) {
+      // User is not authenticated, redirect to login
+      router.push('/login');
+    } else if (isAuthenticated && user && user.id) {
       // Don't use the refresh mechanism that causes infinite loops
       // Just fetch tasks normally if not already fetched
       if (!fetchCalledRef.current) {
@@ -45,11 +48,8 @@ export default function TasksContent() {
         fetchTasks(user.id);
         fetchCalledRef.current = true; // Mark that fetch has been called
       }
-    } else if (!isAuthenticated) {
-      // User is not authenticated, redirect to login
-      router.push('/login');
     }
-  }, [isAuthenticated, user, router]);
+  }, [isAuthenticated, authIsLoading, user, router]);
 
   // Focus management - when task form opens, focus on the main content area
   useEffect(() => {
@@ -83,24 +83,31 @@ export default function TasksContent() {
       const data = await api.getTasks(userId);
 
       // Transform backend tasks to UI format
-      const uiTasks = data.map(task => ({
-        id: task.id,
-        user_id: task.user_id,
-        title: task.title,
-        description: task.description,
-        completed: task.completed,
-        status: task.completed ? 'completed' as const : 'todo' as const, // Initially map completed to 'completed', others to 'todo'
-        priority: 'medium' as const, // Default priority
-        dueDate: undefined, // Backend doesn't have due date field
-        tags: [], // Backend doesn't have tags field
-        estimatedTime: undefined, // Backend doesn't have estimated time
-        actualTimeSpent: undefined, // Backend doesn't have actual time spent
-        timeLogged: [], // Backend doesn't have time logged
-        dependencies: [], // Backend doesn't have dependencies
-        assignee: undefined, // Backend doesn't have assignee
-        createdAt: task.created_at, // Map to expected field name
-        updatedAt: task.updated_at // Map to expected field name
-      }));
+      const uiTasks = data.map(task => {
+        // Check if we have saved status for this task in localStorage
+        const savedStatus = typeof window !== 'undefined'
+          ? localStorage.getItem(`task-status-${task.id}`)
+          : null;
+
+        return {
+          id: task.id,
+          user_id: task.user_id,
+          title: task.title,
+          description: task.description,
+          completed: task.completed,
+          status: (savedStatus as 'todo' | 'in-progress' | 'completed') || (task.completed ? 'completed' as const : 'todo' as const), // Use saved status or default based on completed field
+          priority: 'medium' as const, // Default priority
+          dueDate: undefined, // Backend doesn't have due date field
+          tags: [], // Backend doesn't have tags field
+          estimatedTime: undefined, // Backend doesn't have estimated time
+          actualTimeSpent: undefined, // Backend doesn't have actual time spent
+          timeLogged: [], // Backend doesn't have time logged
+          dependencies: [], // Backend doesn't have dependencies
+          assignee: undefined, // Backend doesn't have assignee
+          createdAt: task.created_at, // Map to expected field name
+          updatedAt: task.updated_at // Map to expected field name
+        };
+      });
 
       setTasks(uiTasks);
     } catch (error) {
@@ -127,6 +134,9 @@ export default function TasksContent() {
         description: taskData.description
       });
 
+      // Determine the status for the new task - default to 'todo'
+      const newTaskStatus: 'todo' | 'in-progress' | 'completed' = 'todo';
+
       // Transform the created task to UI format
       const uiNewTask = {
         id: newTask.id,
@@ -134,7 +144,7 @@ export default function TasksContent() {
         title: newTask.title,
         description: newTask.description,
         completed: newTask.completed,
-        status: newTask.completed ? 'completed' as const : 'todo' as const, // New tasks start as 'todo' if not completed
+        status: newTaskStatus, // New tasks start as 'todo'
         priority: 'medium' as const, // Default priority
         dueDate: undefined, // Backend doesn't have due date field
         tags: [], // Backend doesn't have tags field
@@ -148,6 +158,12 @@ export default function TasksContent() {
       };
 
       setTasks([...tasks, uiNewTask]);
+
+      // Save the status to localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(`task-status-${newTask.id}`, newTaskStatus);
+      }
+
       setShowTaskForm(false);
     } catch (error) {
       console.error('Failed to create task:', error);
@@ -164,10 +180,15 @@ export default function TasksContent() {
       const updatedTask = await api.updateTask(user.id, editingTask.id, taskData);
 
       // Transform the updated task to UI format
-      // Preserve the current status if it was 'in-progress', otherwise update based on completed status
+      // Preserve the current status if it's in 'in-progress' or 'todo', otherwise update based on completed status
       const currentTask = tasks.find(t => t.id === editingTask.id);
-      const newStatus = updatedTask.completed ? 'completed' :
-                       currentTask?.status === 'in-progress' ? 'in-progress' : 'todo';
+      let newStatus = currentTask?.status || 'todo'; // Preserve current status by default
+
+      // If the backend completed field changed, then we should update the status accordingly
+      // Only override the status if the completion state has changed
+      if (taskData.completed !== undefined && taskData.completed !== currentTask?.completed) {
+        newStatus = updatedTask.completed ? 'completed' : currentTask?.status || 'todo';
+      }
 
       const uiUpdatedTask = {
         id: updatedTask.id,
@@ -189,6 +210,12 @@ export default function TasksContent() {
       };
 
       setTasks(tasks.map(task => task.id === editingTask.id ? uiUpdatedTask : task));
+
+      // Update localStorage to reflect the new status
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(`task-status-${editingTask.id}`, newStatus);
+      }
+
       setEditingTask(null);
       setShowTaskForm(false);
     } catch (error) {
@@ -219,18 +246,26 @@ export default function TasksContent() {
 
     try {
       // Optimistic update
-      // When toggling via checkbox, the status should be 'completed' if completed is true, otherwise 'todo'
+      // When toggling via checkbox, the status should be 'completed' if completed is true,
+      // otherwise maintain the current status or default to 'todo'
       // Preserve 'in-progress' status if the task was in progress before toggling
+      const newStatus = completed ? 'completed' : task.status === 'in-progress' ? 'in-progress' : 'todo';
+
       setTasks(tasks.map(t =>
-        t.id === id ? { ...t, completed, status: completed ? 'completed' : 'todo' } : t
+        t.id === id ? { ...t, completed, status: newStatus } : t
       ));
 
       // Update on server
       await api.toggleTaskCompletion(user.id, id);
+
+      // Update localStorage to reflect the new status
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(`task-status-${id}`, newStatus);
+      }
     } catch (error) {
       // Revert optimistic update on error
       setTasks(tasks.map(t =>
-        t.id === id ? { ...t, completed: !completed, status: !completed ? 'completed' : 'todo' } : t
+        t.id === id ? { ...t, completed: !completed, status: task.status } : t
       ));
       console.error('Failed to update task:', error);
     }
@@ -243,8 +278,9 @@ export default function TasksContent() {
     if (!task) return;
 
     try {
-      // Optimistic update - convert status to completed boolean for backend
-      // For the UI, we'll track the actual status separately
+      // Optimistic update - determine backend completed status based on UI status
+      // completed = true only if UI status is 'completed'
+      // completed = false if UI status is 'todo' or 'in-progress'
       const completed = newStatus === 'completed';
 
       // Update the task with both the completed boolean (for backend) and the status (for UI)
@@ -252,13 +288,24 @@ export default function TasksContent() {
         t.id === id ? { ...t, completed, status: newStatus } : t
       ));
 
+      // Save the status to localStorage so it persists after refresh
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(`task-status-${id}`, newStatus);
+      }
+
       // Update on server (only the completed field is sent to backend)
       await api.updateTask(user.id, id, { completed });
     } catch (error) {
       // Revert optimistic update on error
       setTasks(tasks.map(t =>
-        t.id === id ? { ...t, completed: task.completed, status: task.completed ? 'completed' : 'todo' } : t
+        t.id === id ? { ...t, completed: task.completed, status: task.status } : t
       ));
+
+      // Also revert the localStorage status
+      if (typeof window !== 'undefined' && task) {
+        localStorage.setItem(`task-status-${id}`, task.status);
+      }
+
       console.error('Failed to update task status:', error);
     }
   };
@@ -295,7 +342,18 @@ export default function TasksContent() {
   const pendingTasks = tasks.filter(task => !task.completed).length;
 
 
-  // If not authenticated, redirect will happen via useEffect
+  // If still authenticating, show loading
+  // if (authIsLoading) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center bg-background">
+  //       <div className="text-center">
+  //         <p className="text-lg">Authenticating...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  // If not authenticated and not loading, redirect will happen via useEffect
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
