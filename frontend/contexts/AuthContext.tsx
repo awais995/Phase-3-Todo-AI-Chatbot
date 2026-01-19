@@ -93,7 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signup = async (name: string, email: string, password: string) => {
     setIsLoading(true);
-    let response; // Declare response variable outside try block to make it accessible in catch block
+    let response = null; // Initialize response variable to make it accessible in catch block
 
     try {
       response = await api.signup({ email, password, name });
@@ -165,8 +165,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Check if it's specifically a token issue and handle appropriately
         if (error.message.includes('No token found')) {
           // If it's a token issue, try to use the response data directly
+          // Only access response if it was successfully obtained from signup
+          const userId = response?.user?.id || '';
+
           setUser({
-            id: response?.user?.id || '',
+            id: userId,
             email: email,
             name: name,
             bio: null
