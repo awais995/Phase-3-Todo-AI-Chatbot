@@ -408,7 +408,7 @@ class ApiClient {
   }
 
   // Get session information
-  async getSession(): Promise<any> {
+  async getSession(showSuccessMessage: boolean = true, showErrorMessage: boolean = true): Promise<any> {
     try {
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
@@ -426,15 +426,37 @@ class ApiClient {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         const errorMessage = errorData.detail || errorData.message || 'Failed to retrieve session';
-        toast.error(errorMessage);
+        if (showErrorMessage) {
+          toast.error(errorMessage);
+        }
         throw new Error(errorMessage);
       }
 
       const result = await response.json();
-      toast.success('Session retrieved successfully');
+      if (showSuccessMessage) {
+        toast.success('Session retrieved successfully');
+      }
       return result;
     } catch (error) {
-      toast.error('Failed to retrieve session');
+      if (showErrorMessage) {
+        toast.error('Failed to retrieve session');
+      }
+      throw error;
+    }
+  }
+
+  // Update user profile
+  async updateUserProfile(userData: { name?: string; bio?: string }): Promise<any> {
+    try {
+      const result: any = await this.request('/api/auth/profile', {
+        method: 'PUT',
+        body: JSON.stringify(userData),
+      });
+
+      toast.success('Profile updated successfully');
+      return result;
+    } catch (error) {
+      toast.error('Failed to update profile');
       throw error;
     }
   }
@@ -466,6 +488,7 @@ class ApiClient {
       toast.success('Logged out successfully');
     }
   }
+
 }
 
 export const api = new ApiClient();

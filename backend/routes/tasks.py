@@ -81,6 +81,7 @@ def create_task(
     task = Task(
         title=task_data.title,
         description=task_data.description,
+        priority=task_data.priority if task_data.priority else "medium",  # Set priority from request or default to medium
         user_id=user_id
     )
 
@@ -178,6 +179,9 @@ def update_task(
 
     if task_data.completed is not None:
         task.completed = task_data.completed
+
+    if task_data.priority is not None:
+        task.priority = task_data.priority
 
     # Update the updated_at timestamp
     task.updated_at = datetime.utcnow()

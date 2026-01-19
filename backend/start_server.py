@@ -1,5 +1,4 @@
 import uvicorn
-from main import app
 
 if __name__ == "__main__":
     print("Starting server with debug mode enabled...")
@@ -11,4 +10,4 @@ if __name__ == "__main__":
     from config import SECRET_KEY
     print(f"Loaded SECRET_KEY length: {len(SECRET_KEY)}")
 
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

@@ -110,7 +110,7 @@ export function TaskCard({
 
   return (
     <Card
-      className={`transition-all duration-300 ease-in-out hover:scale-[1.01] hover:shadow-lg shadow-sm border bg-card hover:bg-card/95 backdrop-blur-sm ${
+      className={`transition-all duration-300 ease-in-out hover:scale-[1.01] hover:shadow-lg shadow-sm border bg-card hover:bg-card/95 ${
         completed ? 'opacity-75' : ''
       } ${showActions ? 'ring-1 ring-primary/50 shadow-md' : 'shadow-sm'}`}
       onMouseEnter={() => setShowActions(true)}
@@ -151,13 +151,13 @@ export function TaskCard({
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-8 w-8 p-0 rounded-full hover:bg-accent transition-all duration-200 hover:scale-105 opacity-0 group-hover:opacity-100"
+                          className="h-8 w-8 p-0 rounded-full hover:bg-accent transition-all duration-200 hover:scale-105 opacity-70 hover:opacity-100 data-[state=open]:opacity-100"
                           aria-label="Task options"
                         >
                           <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-48 z-50 min-w-[200px] max-h-[300px] overflow-y-auto rounded-lg shadow-lg p-2">
+                      <DropdownMenuContent align="end" className="w-48 z-50 min-w-[200px] max-h-[300px] overflow-y-auto rounded-lg shadow-lg p-2 bg-popover border border-border">
                         <DropdownMenuItem onClick={() => onEdit(id)} className="cursor-pointer focus:bg-accent focus:text-accent-foreground p-2">
                           <Edit3 className="h-4 w-4 mr-2" />
                           Edit

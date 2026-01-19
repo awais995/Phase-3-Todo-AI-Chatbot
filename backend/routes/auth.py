@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Form
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlmodel import Session, select
-from models import User, UserCreate, UserLogin, UserRead
+from models import User, UserCreate, UserLogin, UserRead, UserUpdate
 from dependencies import verify_token
 from db import get_session
 from passlib.context import CryptContext
@@ -10,6 +10,11 @@ from jose import jwt
 import os
 import secrets
 from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from typing import Dict
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
@@ -107,6 +112,45 @@ def login(user_data: UserLogin, session: Session = Depends(get_session)):
     }
 
 
+@router.put("/profile", response_model=UserRead)
+def update_profile(user_update: UserUpdate, credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer()), session: Session = Depends(get_session)):
+    """
+    Update the current user's profile information.
+    Email cannot be updated for security reasons.
+    """
+    try:
+        user_id = verify_token(credentials.credentials)
+
+        # Get user from database
+        user = session.get(User, user_id)
+
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found"
+            )
+
+        # Update allowed fields, excluding email for security
+        update_data = user_update.dict(exclude_unset=True)
+        for field, value in update_data.items():
+            if hasattr(user, field) and field != 'email':  # Prevent email updates
+                setattr(user, field, value)
+
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+
+        return user
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+
 @router.get("/session")
 def get_session_endpoint(credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer()), session: Session = Depends(get_session)):
     """
@@ -129,7 +173,8 @@ def get_session_endpoint(credentials: HTTPAuthorizationCredentials = Depends(HTT
             "user": {
                 "id": user.id,
                 "email": user.email,
-                "name": user.name
+                "name": user.name,
+                "bio": user.bio
             },
             "token": credentials.credentials
         }
@@ -158,6 +203,8 @@ def sign_out():
     return {"message": "Signed out successfully"}
 
 
+
+
 # Debug endpoint to check SECRET_KEY
 @router.get("/debug/keys")
 def debug_keys():
@@ -166,3 +213,5 @@ def debug_keys():
     """
     from config import SECRET_KEY
     return {"secret_key": SECRET_KEY[:20] + "...", "full_length": len(SECRET_KEY)}
+
+

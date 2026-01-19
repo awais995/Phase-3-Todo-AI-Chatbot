@@ -55,7 +55,7 @@ export function TaskDependencyManager({
   };
 
   return (
-    <Card className="border-0 bg-gradient-to-br from-card to-muted/30 backdrop-blur-sm">
+    <Card className="border-0 bg-gradient-to-br from-card to-muted/30">
       <CardHeader className="pb-3">
         <div className="flex items-center gap-2">
           <AlertTriangle className="h-5 w-5 text-primary" />

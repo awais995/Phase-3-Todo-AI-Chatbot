@@ -9,6 +9,7 @@ class User(SQLModel, table=True):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
     email: str = Field(unique=True, nullable=False)
     name: str = Field(nullable=False)
+    bio: Optional[str] = Field(default=None, max_length=500)  # Add bio field
     password: str = Field(nullable=False)  # Add password field
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
@@ -17,6 +18,7 @@ class TaskBase(SQLModel):
     title: str = Field(min_length=1, max_length=200)
     description: Optional[str] = Field(default=None, max_length=1000)
     completed: bool = Field(default=False)
+    priority: str = Field(default="medium", max_length=20)  # Add priority field
 
 class Task(TaskBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -40,16 +42,24 @@ class UserRead(BaseModel):
     id: str
     email: str
     name: str
+    bio: Optional[str] = None
     created_at: datetime
+
+
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
+    bio: Optional[str] = None
 
 class TaskCreate(BaseModel):
     title: str
     description: Optional[str] = None
+    priority: Optional[str] = None  # Add priority field as optional without default
 
 class TaskUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     completed: Optional[bool] = None
+    priority: Optional[str] = None  # Add priority field
 
 class TaskRead(TaskBase):
     id: int

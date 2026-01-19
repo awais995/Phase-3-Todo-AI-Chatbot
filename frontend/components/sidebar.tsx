@@ -24,7 +24,7 @@ export function Sidebar({ closeSidebar }: SidebarProps) {
     },
     {
       title: 'Add Task',
-      href: '/tasks?add=true',
+      href: '#',
       icon: Plus,
     },
     {
@@ -35,19 +35,19 @@ export function Sidebar({ closeSidebar }: SidebarProps) {
   ];
 
   const handleNavClick = (href: string) => {
-    if (href === '/tasks?add=true') {
-      // For the "Add Task" option, we want to trigger the task creation modal
-      // We'll navigate to /tasks with the add parameter
-      router.push('/tasks?add=true');
-      // Use a delay to ensure the page has loaded and the effect can process the parameter
-      setTimeout(() => {
-        // Also trigger the custom event as a backup method
-        window.dispatchEvent(new CustomEvent('open-add-task'));
-      }, 500); // Increased delay to ensure page is fully loaded
+    if (href === '#') {
+      // For the "Add Task" option, trigger the task creation modal directly
+      router.push('/tasks'); // Navigate to tasks page first
+      // Trigger the custom event to open the task form
+      window.dispatchEvent(new CustomEvent('open-add-task'));
       closeSidebar();
     } else if (href === '/tasks') {
       // For the "Dashboard" option, just navigate to the tasks page
       router.push('/tasks');
+      closeSidebar();
+    } else if (href === '/settings') {
+      // For the "Settings" option, navigate to the settings page
+      router.push('/settings');
       closeSidebar();
     } else {
       if (closeSidebar) {
@@ -85,26 +85,32 @@ export function Sidebar({ closeSidebar }: SidebarProps) {
         <nav className="grid items-start gap-1">
           {navItems.map((item) => {
             const isActive = pathname === item.href || (item.href === '/tasks' && pathname.startsWith('/tasks'));
+            // Special case: Add Task should be highlighted when on the tasks page
+            const isAddTaskActive = item.title === 'Add Task' && pathname.startsWith('/tasks');
             const Icon = item.icon;
 
             return (
-              <Link
+              <button
                 key={item.href}
-                href={item.href}
                 onClick={() => handleNavClick(item.href)}
                 className={cn(
-                  'flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-300 hover:bg-primary/10 hover:text-primary group',
-                  isActive
-                    ? 'bg-primary/10 text-primary border-l-2 border-primary'
-                    : 'text-muted-foreground'
+                  'flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-300 hover:bg-primary/10 hover:text-primary group w-full text-left',
+                  item.href === '#' ?
+                    (isAddTaskActive
+                      ? 'bg-primary/10 text-primary border-l-2 border-primary'
+                      : 'text-muted-foreground')
+                    :
+                    (isActive
+                      ? 'bg-primary/10 text-primary border-l-2 border-primary'
+                      : 'text-muted-foreground')
                 )}
               >
                 <Icon className="mr-3 h-4 w-4 transition-transform group-hover:scale-110" />
                 <span className="flex-1">{item.title}</span>
-                {isActive && (
+                {(isActive || isAddTaskActive) && (
                   <div className="w-2 h-2 bg-primary rounded-full"></div>
                 )}
-              </Link>
+              </button>
             );
           })}
         </nav>
@@ -112,7 +118,15 @@ export function Sidebar({ closeSidebar }: SidebarProps) {
 
       {/* User Profile Section */}
       <div className="p-4 border-t border-border/30">
-        <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/20 hover:bg-muted/40 transition-colors cursor-pointer mb-2">
+        <Link
+          href="/profile"
+          onClick={() => {
+            if (closeSidebar) {
+              closeSidebar();
+            }
+          }}
+          className="flex items-center gap-3 p-3 rounded-lg bg-muted/20 hover:bg-muted/40 transition-colors cursor-pointer mb-2"
+        >
           <div className="p-2 bg-gradient-to-r from-secondary to-primary rounded-full">
             <User className="h-4 w-4 text-white" />
           </div>
@@ -120,7 +134,7 @@ export function Sidebar({ closeSidebar }: SidebarProps) {
             <p className="text-sm font-medium truncate">User Profile</p>
             <p className="text-xs text-muted-foreground truncate">View your profile</p>
           </div>
-        </div>
+        </Link>
 
         <Button
           variant="ghost"

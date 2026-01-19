@@ -71,6 +71,7 @@ export default function TasksContent() {
     };
   }, []);
 
+
   const fetchTasks = async (userId: string) => {
     if (!userId) {
       setLoading(false);
@@ -96,7 +97,7 @@ export default function TasksContent() {
           description: task.description,
           completed: task.completed,
           status: (savedStatus as 'todo' | 'in-progress' | 'completed') || (task.completed ? 'completed' as const : 'todo' as const), // Use saved status or default based on completed field
-          priority: 'medium' as const, // Default priority
+          priority: (task.priority || 'medium') as 'critical' | 'high' | 'medium' | 'low', // Use priority from backend or default to medium
           dueDate: undefined, // Backend doesn't have due date field
           tags: [], // Backend doesn't have tags field
           estimatedTime: undefined, // Backend doesn't have estimated time
@@ -128,10 +129,11 @@ export default function TasksContent() {
 
     setIsSubmitting(true);
     try {
-      // Send task data to API (only title and description are supported by backend)
+      // Send task data to API (send title, description, and priority)
       const newTask = await api.createTask(user.id, {
         title: taskData.title,
-        description: taskData.description
+        description: taskData.description,
+        priority: taskData.priority || 'medium'
       });
 
       // Determine the status for the new task - default to 'todo'
@@ -145,7 +147,7 @@ export default function TasksContent() {
         description: newTask.description,
         completed: newTask.completed,
         status: newTaskStatus, // New tasks start as 'todo'
-        priority: 'medium' as const, // Default priority
+        priority: (newTask.priority || 'medium') as 'critical' | 'high' | 'medium' | 'low', // Use priority from backend or default to medium
         dueDate: undefined, // Backend doesn't have due date field
         tags: [], // Backend doesn't have tags field
         estimatedTime: undefined, // Backend doesn't have estimated time
@@ -172,12 +174,19 @@ export default function TasksContent() {
     }
   };
 
-  const handleUpdateTask = async (taskData: { title?: string; description?: string; completed?: boolean }) => {
+  const handleUpdateTask = async (taskData: { title?: string; description?: string; completed?: boolean; priority?: string }) => {
     if (!editingTask || !user?.id) return;
 
     setIsSubmitting(true);
     try {
-      const updatedTask = await api.updateTask(user.id, editingTask.id, taskData);
+      // Prepare update data based on what was provided
+      const updateData: any = {};
+      if (taskData.title !== undefined) updateData.title = taskData.title;
+      if (taskData.description !== undefined) updateData.description = taskData.description;
+      if (taskData.completed !== undefined) updateData.completed = taskData.completed;
+      if (taskData.priority !== undefined) updateData.priority = taskData.priority;
+
+      const updatedTask = await api.updateTask(user.id, editingTask.id, updateData);
 
       // Transform the updated task to UI format
       // Preserve the current status if it's in 'in-progress' or 'todo', otherwise update based on completed status
@@ -197,7 +206,7 @@ export default function TasksContent() {
         description: updatedTask.description,
         completed: updatedTask.completed,
         status: newStatus as 'todo' | 'in-progress' | 'completed',
-        priority: 'medium' as const, // Default priority
+        priority: (updatedTask.priority || 'medium') as 'critical' | 'high' | 'medium' | 'low', // Use priority from backend or default to medium
         dueDate: undefined, // Backend doesn't have due date field
         tags: [], // Backend doesn't have tags field
         estimatedTime: undefined, // Backend doesn't have estimated time
@@ -311,9 +320,26 @@ export default function TasksContent() {
   };
 
   const handlePriorityChange = async (id: number, newPriority: 'critical' | 'high' | 'medium' | 'low') => {
-    // Priority field is not supported by the backend model
-    // This function currently does nothing to prevent errors
-    console.warn('Priority field is not supported by the backend model');
+    if (!user?.id) return;
+
+    const task = tasks.find(t => t.id === id);
+    if (!task) return;
+
+    try {
+      // Optimistic update
+      setTasks(tasks.map(t =>
+        t.id === id ? { ...t, priority: newPriority } : t
+      ));
+
+      // Update on server
+      await api.updateTask(user.id, id, { priority: newPriority });
+    } catch (error) {
+      // Revert optimistic update on error
+      setTasks(tasks.map(t =>
+        t.id === id ? { ...t, priority: task.priority } : t
+      ));
+      console.error('Failed to update task priority:', error);
+    }
   };
 
   const handleEditTask = (id: number) => {
@@ -393,7 +419,7 @@ export default function TasksContent() {
         <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
           <SheetContent
             side="left"
-            className="w-64 p-0 bg-background border-r border-border/50 backdrop-blur-sm shadow-2xl"
+            className="w-64 p-0 bg-background border-r border-border shadow-2xl"
             role="navigation"
             aria-label="Mobile navigation"
           >
@@ -434,7 +460,7 @@ export default function TasksContent() {
 
               {/* Stats Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                <div className="bg-gradient-to-br from-card to-muted/30 p-5 rounded-xl border border-border/50 backdrop-blur-sm">
+                <div className="bg-gradient-to-br from-card to-muted/30 p-5 rounded-xl border border-border/50">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Total Tasks</p>
@@ -446,7 +472,7 @@ export default function TasksContent() {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-card to-muted/30 p-5 rounded-xl border border-border/50 backdrop-blur-sm">
+                <div className="bg-gradient-to-br from-card to-muted/30 p-5 rounded-xl border border-border/50">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Completed</p>
@@ -458,7 +484,7 @@ export default function TasksContent() {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-card to-muted/30 p-5 rounded-xl border border-border/50 backdrop-blur-sm">
+                <div className="bg-gradient-to-br from-card to-muted/30 p-5 rounded-xl border border-border/50">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Pending</p>
@@ -470,7 +496,7 @@ export default function TasksContent() {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-card to-muted/30 p-5 rounded-xl border border-border/50 backdrop-blur-sm">
+                <div className="bg-gradient-to-br from-card to-muted/30 p-5 rounded-xl border border-border/50">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">To Do</p>

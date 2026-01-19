@@ -11,11 +11,13 @@ import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { useAuth } from '@/contexts/AuthContext';
 import { Moon, Sun, User, Lock, Bell, Save } from 'lucide-react';
+import { toast } from 'sonner';
+import { api } from '@/lib/api';
 
 export default function SettingsPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { theme, setTheme } = useTheme();
-  const { user } = useAuth();
+  const { user, checkAuthStatus } = useAuth();
   const [isMounted, setIsMounted] = useState(false);
   const [profile, setProfile] = useState({
     name: '',
@@ -35,7 +37,7 @@ export default function SettingsPage() {
       setProfile({
         name: user.name || user.username || user.email?.split('@')[0] || 'User',
         email: user.email || '',
-        bio: user.bio || 'Software Developer' // Use bio if available, otherwise default
+        bio: user.bio || '' // Use bio if available, otherwise empty string
       });
     }
   }, [user]);
@@ -45,15 +47,30 @@ export default function SettingsPage() {
     console.log('Profile saved:', profile);
 
     try {
-      // In a real implementation, you would update the user profile via API
-      // For now, we'll just log the changes
-      // await api.updateUserProfile(profile);
+      // Update the user profile via API (excluding email for security)
+      const updatedUserData = await api.updateUserProfile({
+        name: profile.name,
+        bio: profile.bio
+      });
+
+      // Refresh the user context to update the bio in the UI
+      if (user) {
+        // Update the local state to reflect the changes
+        setProfile(prev => ({
+          ...prev,
+          name: profile.name,
+          bio: profile.bio
+        }));
+
+        // Refresh the user context by calling checkAuthStatus
+        await checkAuthStatus();
+      }
 
       // Show success message
-      alert('Profile updated successfully!');
+      toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Failed to update profile:', error);
-      alert('Failed to update profile. Please try again.');
+      toast.error('Failed to update profile. Please try again.');
     }
   };
 
@@ -89,7 +106,7 @@ export default function SettingsPage() {
         <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
           <SheetContent
             side="left"
-            className="w-64 p-0 bg-background border-r border-border/50 backdrop-blur-sm shadow-2xl"
+            className="w-64 p-0 bg-background border-r border-border shadow-2xl"
             role="navigation"
             aria-label="Mobile navigation"
           >

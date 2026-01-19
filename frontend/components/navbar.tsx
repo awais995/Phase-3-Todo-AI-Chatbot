@@ -22,7 +22,7 @@ export function Navbar() {
   const logoHref = isLoading || !isAuthenticated ? "/" : "/tasks";
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/70 backdrop-blur-lg supports-[backdrop-filter]:bg-background/60 shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/90 border-border shadow-sm">
       <div className="container flex h-16 items-center">
         <div className="flex items-center gap-4">
           {/* Mobile menu button */}
@@ -35,7 +35,7 @@ export function Navbar() {
             </SheetTrigger>
             <SheetContent
               side="left"
-              className="w-64 p-0 bg-background border-r border-border/50 backdrop-blur-sm shadow-2xl"
+              className="w-64 p-0 bg-background border-r border-border shadow-2xl"
             >
               <Sidebar closeSidebar={() => setSidebarOpen(false)} />
             </SheetContent>

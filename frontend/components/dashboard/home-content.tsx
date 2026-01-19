@@ -25,7 +25,7 @@ export default function DashboardContent() {
         <div className="max-w-6xl mx-auto">
           {/* Hero Section */}
           <div className="text-center mb-20 space-y-8">
-            <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/80 dark:bg-slate-800/80 rounded-full border border-slate-200/60 dark:border-slate-700/60 backdrop-blur-sm shadow-lg">
+            <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/80 dark:bg-slate-800/80 rounded-full border border-slate-200/60 dark:border-slate-700/60 shadow-lg">
               <div className="h-3 w-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse shadow-sm shadow-blue-500/30"></div>
               <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Task Management Platform</span>
             </div>
@@ -41,7 +41,7 @@ export default function DashboardContent() {
 
           {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-            <Card className="group hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm overflow-hidden relative h-full">
+            <Card className="group hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 overflow-hidden relative h-full">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <CardHeader className="relative z-10 text-center pb-4">
                 <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-5 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-blue-500/20">
@@ -59,7 +59,7 @@ export default function DashboardContent() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm overflow-hidden relative h-full">
+            <Card className="group hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 overflow-hidden relative h-full">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <CardHeader className="relative z-10 text-center pb-4">
                 <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-5 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-purple-500/20">
@@ -77,7 +77,7 @@ export default function DashboardContent() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm overflow-hidden relative h-full">
+            <Card className="group hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 overflow-hidden relative h-full">
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <CardHeader className="relative z-10 text-center pb-4">
                 <div className="w-16 h-16 bg-gradient-to-r from-cyan-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-5 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-cyan-500/20">
@@ -95,7 +95,7 @@ export default function DashboardContent() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-2xl hover:shadow-green-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm overflow-hidden relative h-full">
+            <Card className="group hover:shadow-2xl hover:shadow-green-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 overflow-hidden relative h-full">
               <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <CardHeader className="relative z-10 text-center pb-4">
                 <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-5 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-green-500/20">
@@ -113,7 +113,7 @@ export default function DashboardContent() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm overflow-hidden relative h-full">
+            <Card className="group hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 overflow-hidden relative h-full">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <CardHeader className="relative z-10 text-center pb-4">
                 <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-5 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-orange-500/20">
@@ -131,7 +131,7 @@ export default function DashboardContent() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-2xl hover:shadow-pink-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm overflow-hidden relative h-full">
+            <Card className="group hover:shadow-2xl hover:shadow-pink-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 overflow-hidden relative h-full">
               <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <CardHeader className="relative z-10 text-center pb-4">
                 <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center mb-5 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-pink-500/20">

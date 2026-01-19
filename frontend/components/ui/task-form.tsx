@@ -143,13 +143,13 @@ export function TaskForm({ open, onOpenChange, task, onSubmit, loading }: TaskFo
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="sm:max-w-lg max-h-[90vh] overflow-hidden flex flex-col p-0 border-border shadow-xl rounded-xl"
+        className="sm:max-w-lg max-h-[90vh] overflow-hidden flex flex-col p-0 border-border shadow-2xl rounded-xl bg-background"
         role="dialog"
         aria-modal="true"
         aria-labelledby="task-form-title"
       >
         <div className="flex flex-col h-full max-h-[80vh]">
-          <DialogHeader className="p-6 pb-4 border-b border-border/50 bg-background/50 backdrop-blur-sm">
+          <DialogHeader className="p-6 pb-4 border-b border-border/50 bg-background">
             <DialogTitle
               id="task-form-title"
               className="text-2xl font-semibold text-foreground tracking-tight"
@@ -341,7 +341,7 @@ export function TaskForm({ open, onOpenChange, task, onSubmit, loading }: TaskFo
                 </p>
               </div>
 
-              <DialogFooter className="gap-3 pt-6 border-t border-border/50 -mx-6 px-6 pb-6 bg-background/30 backdrop-blur-sm">
+              <DialogFooter className="gap-3 pt-6 border-t border-border/50 -mx-6 px-6 pb-6 bg-background">
                 <Button
                   type="button"
                   variant="outline"
