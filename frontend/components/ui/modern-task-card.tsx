@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Edit3, Trash2, Clock, CheckCircle, Circle, MoreHorizontal, Calendar, Flag, Tag, Timer, AlertTriangle } from 'lucide-react';
+import { Edit3, Trash2, Clock, CheckCircle, Circle, MoreHorizontal, Calendar, Flag, Tag, Timer, AlertTriangle, Users, Eye, EyeOff } from 'lucide-react';
 import { priorityConfig, formatTime, calculateProgress } from '@/lib/task-types';
 
 interface TaskCardProps {
@@ -20,6 +21,10 @@ interface TaskCardProps {
   estimatedTime?: number;
   actualTimeSpent?: number;
   dependencies?: string[];
+  assignee?: {
+    name: string;
+    avatar?: string;
+  };
   onEdit: (id: number) => void;
   onDelete: (id: number) => void;
   onToggle: (id: number, completed: boolean) => void;
@@ -27,7 +32,7 @@ interface TaskCardProps {
   onPriorityChange?: (id: number, priority: 'critical' | 'high' | 'medium' | 'low') => void;
 }
 
-export function TaskCard({
+export function ModernTaskCard({
   id,
   title,
   description,
@@ -39,6 +44,7 @@ export function TaskCard({
   estimatedTime,
   actualTimeSpent,
   dependencies,
+  assignee,
   onEdit,
   onDelete,
   onToggle,
@@ -110,34 +116,34 @@ export function TaskCard({
 
   return (
     <Card
-      className={`transition-all duration-300 ease-in-out hover:shadow-md shadow-sm border border-gray-200 bg-white hover:bg-gray-50 ${
+      className={`transition-all duration-300 ease-in-out hover:shadow-lg shadow-sm border-0 bg-white hover:bg-gray-50 ${
         completed ? 'opacity-75' : ''
-      } ${showActions ? 'ring-1 ring-indigo-500/50 shadow-md' : 'shadow-sm'}`}
+      } ${showActions ? 'ring-1 ring-indigo-500/30 shadow-md' : 'shadow-sm'} relative group`}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
       role="listitem"
       aria-labelledby={`task-title-${id}`}
       aria-describedby={`task-description-${id} task-status-${id}`}
     >
-      <CardContent className="p-5 pb-4 relative">
-        <div className="flex items-start gap-4">
+      <CardContent className="p-4 relative">
+        <div className="flex items-start gap-3">
           <div className="pt-1 flex-shrink-0">
             <Checkbox
               id={`task-checkbox-${id}`}
               checked={completed}
               onCheckedChange={toggleTask}
               aria-label={`Mark task "${title}" as ${completed ? 'incomplete' : 'complete'}`}
-              className="h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 transition-all duration-200"
+              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 transition-all duration-200"
             />
           </div>
 
           <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-3">
+            <div className="flex items-start justify-between gap-2">
               <div className="flex-1 min-w-0 group">
-                <div className="flex items-start justify-between gap-2 mb-1">
+                <div className="flex items-center justify-between gap-2 mb-1">
                   <h3
                     id={`task-title-${id}`}
-                    className={`font-semibold text-base leading-tight transition-all duration-200 ${
+                    className={`font-semibold text-sm leading-tight transition-all duration-200 ${
                       completed
                         ? 'line-through text-gray-500'
                         : 'text-gray-800 group-hover:text-indigo-700'
@@ -145,19 +151,27 @@ export function TaskCard({
                   >
                     {title}
                   </h3>
-                  <div className="flex items-center gap-2">
+
+                  <div className="flex items-center gap-1">
+                    {assignee && (
+                      <div className="flex items-center gap-1 text-xs text-gray-500">
+                        <Users className="h-3 w-3" />
+                        <span className="truncate max-w-[40px]">{assignee.name?.split(' ')[0]}</span>
+                      </div>
+                    )}
+
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-8 w-8 p-0 rounded-full hover:bg-gray-100 transition-all duration-200 hover:scale-105 opacity-70 hover:opacity-100 data-[state=open]:opacity-100 text-gray-600"
+                          className="h-6 w-6 p-0 rounded-full hover:bg-gray-100 transition-all duration-200 hover:scale-105 opacity-0 group-hover:opacity-100 text-gray-500"
                           aria-label="Task options"
                         >
-                          <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
+                          <MoreHorizontal className="h-3 w-3" aria-hidden="true" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-48 z-50 min-w-[200px] max-h-[300px] overflow-y-auto rounded-lg shadow-lg p-2 bg-white border border-gray-200">
+                      <DropdownMenuContent align="end" className="w-48 z-50 min-w-[180px] max-h-[300px] overflow-y-auto rounded-lg shadow-lg p-2 bg-white border border-gray-200">
                         <DropdownMenuItem onClick={() => onEdit(id)} className="cursor-pointer focus:bg-gray-100 focus:text-gray-900 p-2">
                           <Edit3 className="h-4 w-4 mr-2" />
                           Edit
@@ -219,23 +233,51 @@ export function TaskCard({
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                    <div className="flex items-center gap-1">
-                      <StatusIcon className={`h-3 w-3 ${statusColors[status]} transition-all duration-200`} />
-                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 mb-2">
-                  <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${priorityInfo?.color || 'bg-gray-100 text-gray-700'}`}>
+                <div className="flex items-center gap-1 mb-2">
+                  <Badge variant="secondary" className={`${priorityConfig[priority]?.color} text-xs px-2 py-1 h-6`}>
                     {priorityInfo?.icon || '📝'}
-                    {priorityInfo?.label || 'Medium'}
-                  </span>
+                    <span className="ml-1">{priorityInfo?.label || 'Medium'}</span>
+                  </Badge>
                 </div>
 
+                {/* Description */}
+                {description && (
+                  <p
+                    id={`task-description-${id}`}
+                    className={`text-xs text-gray-600 mb-2 cursor-pointer transition-colors ${
+                      completed ? 'line-through' : ''
+                    }`}
+                    onClick={toggleExpand}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        toggleExpand();
+                      }
+                    }}
+                    tabIndex={0}
+                    role="button"
+                    aria-expanded={isExpanded}
+                    aria-controls={`task-full-description-${id}`}
+                  >
+                    {isExpanded ? description : truncateDescription(description)}
+                    {description.length > 100 && (
+                      <span className="ml-1 text-indigo-600 hover:text-indigo-800 font-medium">
+                        {isExpanded ? 'Show less' : 'Read more'}
+                      </span>
+                    )}
+                  </p>
+                )}
+
                 {/* Due Date and Time Tracking */}
-                <div className="flex flex-wrap items-center gap-3">
+                <div className="flex flex-wrap items-center gap-2 mb-2">
                   {dueDateInfo && (
-                    <div className={`flex items-center gap-1 text-xs ${dueDateInfo.isOverdue ? 'text-red-600 font-medium' : 'text-gray-600'}`}>
+                    <div className={`flex items-center gap-1 text-xs px-2 py-1 rounded-full ${
+                      dueDateInfo.isOverdue
+                        ? 'bg-red-100 text-red-700 border border-red-200'
+                        : 'bg-gray-100 text-gray-600 border border-gray-200'
+                    }`}>
                       <Calendar className="h-3 w-3" />
                       <span>{dueDateInfo.formatted}</span>
                       {dueDateInfo.isOverdue && (
@@ -245,7 +287,7 @@ export function TaskCard({
                   )}
 
                   {(estimatedTime || actualTimeSpent) && (
-                    <div className="flex items-center gap-1 text-xs text-gray-600">
+                    <div className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-600 border border-gray-200">
                       <Timer className="h-3 w-3" />
                       <span>
                         {actualTimeSpent ? formatTime(actualTimeSpent) : '0m'}
@@ -257,22 +299,24 @@ export function TaskCard({
 
                 {/* Tags */}
                 {tags && tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-indigo-100 text-indigo-800 border border-indigo-200"
-                      >
-                        <Tag className="h-2.5 w-2.5" />
+                  <div className="flex flex-wrap gap-1 mb-2">
+                    {tags.slice(0, 2).map((tag, index) => (
+                      <Badge key={index} variant="secondary" className="text-xs px-2 py-1 h-6">
+                        <Tag className="h-2.5 w-2.5 mr-1" />
                         {tag}
-                      </span>
+                      </Badge>
                     ))}
+                    {tags.length > 2 && (
+                      <Badge variant="outline" className="text-xs px-2 py-1 h-6">
+                        +{tags.length - 2}
+                      </Badge>
+                    )}
                   </div>
                 )}
 
                 {/* Progress bar if both estimated and actual time exist */}
                 {estimatedTime && actualTimeSpent !== undefined && (
-                  <div className="mt-2">
+                  <div className="mb-2">
                     <div className="flex justify-between text-xs text-gray-600 mb-1">
                       <span>Progress</span>
                       <span>{progressPercentage}%</span>
@@ -293,56 +337,16 @@ export function TaskCard({
                 )}
               </div>
             </div>
+          </div>
+        </div>
 
-            {description && (
-              <p
-                id={`task-description-${id}`}
-                className={`mt-3 text-sm text-gray-600 cursor-pointer transition-colors ${
-                  completed ? 'line-through' : ''
-                }`}
-                onClick={toggleExpand}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    toggleExpand();
-                  }
-                }}
-                tabIndex={0}
-                role="button"
-                aria-expanded={isExpanded}
-                aria-controls={`task-full-description-${id}`}
-              >
-                {isExpanded ? description : truncateDescription(description)}
-                {description.length > 100 && (
-                  <span className="ml-1 text-indigo-600 hover:text-indigo-800 font-medium">
-                    {isExpanded ? 'Show less' : 'Read more'}
-                  </span>
-                )}
-              </p>
-            )}
-
-            {isExpanded && description && (
-              <div
-                id={`task-full-description-${id}`}
-                className="mt-3 text-sm text-gray-600"
-                aria-live="polite"
-              >
-                {description}
-              </div>
-            )}
+        {/* Status indicator */}
+        <div className="absolute top-4 right-4">
+          <div className="flex items-center gap-1">
+            <StatusIcon className={`h-3 w-3 ${statusColors[status]} transition-all duration-200`} />
           </div>
         </div>
       </CardContent>
-
-      <CardFooter className="p-3 pt-2 bg-gray-50 border-t border-gray-200 transition-all duration-200">
-        <div
-          id={`task-status-${id}`}
-          className="text-xs text-gray-600 flex items-center font-medium"
-          aria-label={`Task status: ${statusText[status]}`}
-        >
-          <StatusIcon className={`h-3 w-3 ${statusColors[status]} mr-1 transition-all duration-200`} />
-          <span>{statusText[status]}</span>
-        </div>
-      </CardFooter>
     </Card>
   );
 }

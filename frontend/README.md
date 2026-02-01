@@ -1,4 +1,4 @@
-# TaskFlow - Modern Todo Application
+# Task Organizer - Modern Todo Application
 
 A sleek, professional task management application with modern UI design and enhanced user experience to help you organize your life and manage tasks efficiently.
 

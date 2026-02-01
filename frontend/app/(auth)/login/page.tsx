@@ -60,41 +60,42 @@ export default function LoginPage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-secondary/5 to-background p-4 relative overflow-hidden"
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4 relative overflow-hidden"
       role="main"
       aria-label="Login page"
     >
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-indigo-500/5 rounded-full blur-2xl animate-pulse delay-500"></div>
       </div>
 
       <div className="relative z-10 w-full max-w-md">
-        <Card className="w-full shadow-2xl border-0 bg-background/95 bg-gradient-to-br from-background/90 to-muted/50 shadow-xl shadow-secondary/10">
+        <Card className="w-full shadow-2xl border-0 bg-white/5 backdrop-blur-sm border border-white/10">
           <CardHeader className="text-center pb-6">
             {/* Branding section */}
             <div className="flex flex-col items-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center mb-3 shadow-lg">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mb-3 shadow-lg shadow-blue-500/20">
                 <Lock className="h-8 w-8 text-white" />
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                TaskFlow
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                Productivity Pro
               </h1>
             </div>
 
-            <CardTitle id="login-title" className="text-3xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent mt-3">
+            <CardTitle id="login-title" className="text-3xl font-bold text-white mt-3">
               Welcome Back
             </CardTitle>
-            <CardDescription className="text-muted-foreground mt-2">
-              Enter your credentials to access your account
+            <CardDescription className="text-white/70 mt-2">
+              Sign in to your account to continue
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               {errors.general && (
                 <div
-                  className="text-destructive text-sm p-3 bg-destructive/10 rounded-lg border border-destructive/20 animate-pulse"
+                  className="text-red-400 text-sm p-3 bg-red-500/20 rounded-lg border border-red-500/30 animate-pulse"
                   role="alert"
                   aria-live="assertive"
                 >
@@ -103,18 +104,18 @@ export default function LoginPage() {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-foreground/80">
+                <Label htmlFor="email" className="text-sm font-medium text-white/80">
                   Email Address
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/60" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="name@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={`pl-10 h-12 ${errors.email ? 'border-red-500 bg-red-50/50 ring-red-500/20' : 'border-input/50'} transition-all duration-300 focus:ring-2 focus:ring-primary/20 focus:border-primary`}
+                    className={`pl-10 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/50 ${errors.email ? 'border-red-500 bg-red-500/10 ring-red-500/30' : 'border-white/20'} transition-all duration-300 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500`}
                     aria-invalid={!!errors.email}
                     aria-describedby={errors.email ? "email-error" : undefined}
                   />
@@ -122,7 +123,7 @@ export default function LoginPage() {
                 {errors.email && (
                   <p
                     id="email-error"
-                    className="text-destructive text-sm flex items-center gap-1"
+                    className="text-red-400 text-sm flex items-center gap-1"
                     role="alert"
                     aria-live="assertive"
                   >
@@ -132,18 +133,18 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-foreground/80">
+                <Label htmlFor="password" className="text-sm font-medium text-white/80">
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/60" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className={`pl-10 pr-10 h-12 ${errors.password ? 'border-red-500 bg-red-50/50 ring-red-500/20' : 'border-input/50'} transition-all duration-300 focus:ring-2 focus:ring-primary/20 focus:border-primary`}
+                    className={`pl-10 pr-10 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/50 ${errors.password ? 'border-red-500 bg-red-500/10 ring-red-500/30' : 'border-white/20'} transition-all duration-300 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500`}
                     aria-invalid={!!errors.password}
                     aria-describedby={errors.password ? "password-error" : undefined}
                   />
@@ -154,16 +155,16 @@ export default function LoginPage() {
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground hover:text-foreground transition-colors" aria-hidden="true" />
+                      <EyeOff className="h-4 w-4 text-white/60 hover:text-white/80 transition-colors" aria-hidden="true" />
                     ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground hover:text-foreground transition-colors" aria-hidden="true" />
+                      <Eye className="h-4 w-4 text-white/60 hover:text-white/80 transition-colors" aria-hidden="true" />
                     )}
                   </button>
                 </div>
                 {errors.password && (
                   <p
                     id="password-error"
-                    className="text-destructive text-sm flex items-center gap-1"
+                    className="text-red-400 text-sm flex items-center gap-1"
                     role="alert"
                     aria-live="assertive"
                   >
@@ -177,20 +178,20 @@ export default function LoginPage() {
                   <input
                     type="checkbox"
                     id="remember-me"
-                    className="h-4 w-4 rounded border-input text-primary focus:ring-primary"
+                    className="h-4 w-4 rounded border-white/30 text-blue-500 focus:ring-blue-500 bg-white/10"
                   />
-                  <Label htmlFor="remember-me" className="text-sm text-foreground/80">
+                  <Label htmlFor="remember-me" className="text-sm text-white/70">
                     Remember me
                   </Label>
                 </div>
-                <a href="#" className="text-sm text-primary hover:underline">
+                <a href="#" className="text-sm text-blue-400 hover:text-blue-300 hover:underline">
                   Forgot password?
                 </a>
               </div>
 
               <Button
                 type="submit"
-                className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 transition-all duration-300 group"
+                className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300 group text-white shadow-lg hover:shadow-2xl shadow-blue-500/20"
                 disabled={loading}
                 aria-busy={loading}
               >
@@ -212,11 +213,11 @@ export default function LoginPage() {
 
             </form>
 
-            <div className="mt-6 text-center text-sm text-muted-foreground">
+            <div className="mt-6 text-center text-sm text-white/70">
               Don't have an account?{' '}
               <Link
                 href="/signup"
-                className="text-primary hover:text-primary/80 hover:underline font-medium transition-colors"
+                className="text-blue-400 hover:text-blue-300 hover:underline font-medium transition-colors"
                 aria-label="Sign up for a new account"
               >
                 Sign up

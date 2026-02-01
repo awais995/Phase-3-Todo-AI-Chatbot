@@ -4,10 +4,10 @@ import TasksContent from './TasksContent';
 // Loading fallback component
 function TasksLoading() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/5 to-background">
+    <div className="flex items-center justify-center p-8">
       <div className="text-center space-y-4">
-        <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-        <p className="text-lg text-muted-foreground">Loading your tasks...</p>
+        <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+        <p className="text-lg text-gray-600">Loading your tasks...</p>
       </div>
     </div>
   );
@@ -15,10 +15,8 @@ function TasksLoading() {
 
 export default function TasksPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/5 to-background">
-      <Suspense fallback={<TasksLoading />}>
-        <TasksContent />
-      </Suspense>
-    </div>
+    <Suspense fallback={null}>
+      <TasksContent />
+    </Suspense>
   );
 }

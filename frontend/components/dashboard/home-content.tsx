@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
-import { CheckCircle, Clock, Target, Calendar, BarChart3, Users } from 'lucide-react';
+import { CheckCircle, Clock, Target, Calendar, BarChart3, Users, Zap, Rocket, Award } from 'lucide-react';
 
 export default function DashboardContent() {
   const router = useRouter();
@@ -14,182 +14,139 @@ export default function DashboardContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-      {/* Background decoration */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-indigo-400/20 to-cyan-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-indigo-500/5 rounded-full blur-2xl animate-pulse delay-500"></div>
       </div>
 
-      <div className="relative container mx-auto py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
+      <div className="relative z-10 container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           {/* Hero Section */}
-          <div className="text-center mb-20 space-y-8">
-            <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/80 dark:bg-slate-800/80 rounded-full border border-slate-200/60 dark:border-slate-700/60 shadow-lg">
-              <div className="h-3 w-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse shadow-sm shadow-blue-500/30"></div>
-              <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Task Management Platform</span>
+          <div className="text-center mb-16 space-y-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium text-white/90">Productivity Reimagined</span>
             </div>
 
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-purple-800 dark:from-white dark:via-blue-200 dark:to-purple-200 bg-clip-text text-transparent leading-tight">
-              Streamline Your Workflow
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight">
+              Transform Your
+              <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Productivity
+              </span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
-              Organize, track, and manage your tasks efficiently with our intuitive platform designed for productivity and focus
+            <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed">
+              The ultimate task management platform designed to boost your efficiency and help you achieve more with less effort.
             </p>
           </div>
 
+          {/* Stats Section */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+            <div className="text-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
+              <div className="text-2xl font-bold text-white mb-1">50K+</div>
+              <div className="text-sm text-white/60">Tasks Completed</div>
+            </div>
+            <div className="text-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
+              <div className="text-2xl font-bold text-white mb-1">98%</div>
+              <div className="text-sm text-white/60">Success Rate</div>
+            </div>
+            <div className="text-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
+              <div className="text-2xl font-bold text-white mb-1">24/7</div>
+              <div className="text-sm text-white/60">Support</div>
+            </div>
+            <div className="text-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
+              <div className="text-2xl font-bold text-white mb-1">100%</div>
+              <div className="text-sm text-white/60">Secure</div>
+            </div>
+          </div>
+
           {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-            <Card className="group hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 overflow-hidden relative h-full">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <CardHeader className="relative z-10 text-center pb-4">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-5 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-blue-500/20">
-                  <CheckCircle className="w-8 h-8 text-white" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300 hover:transform hover:scale-105 group">
+              <CardHeader>
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Zap className="w-6 h-6 text-white" />
                 </div>
-                <CardTitle className="text-2xl font-bold text-slate-900 dark:text-white">Manage Tasks</CardTitle>
-                <CardDescription className="text-slate-600 dark:text-slate-300 mt-2">
-                  Organize and prioritize your work
+                <CardTitle className="text-xl font-semibold text-white">Lightning Fast</CardTitle>
+                <CardDescription className="text-white/70">
+                  Complete tasks in record time with our optimized workflow
                 </CardDescription>
               </CardHeader>
-              <CardContent className="relative z-10 pb-6">
-                <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-                  Create, update, and track your daily tasks with ease and efficiency
+              <CardContent>
+                <p className="text-white/60 text-sm">
+                  Streamlined interface designed for maximum efficiency and speed
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 overflow-hidden relative h-full">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <CardHeader className="relative z-10 text-center pb-4">
-                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-5 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-purple-500/20">
-                  <Target className="w-8 h-8 text-white" />
+            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300 hover:transform hover:scale-105 group">
+              <CardHeader>
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Rocket className="w-6 h-6 text-white" />
                 </div>
-                <CardTitle className="text-2xl font-bold text-slate-900 dark:text-white">Stay Organized</CardTitle>
-                <CardDescription className="text-slate-600 dark:text-slate-300 mt-2">
-                  Keep everything in one place
+                <CardTitle className="text-xl font-semibold text-white">Smart Automation</CardTitle>
+                <CardDescription className="text-white/70">
+                  Automate repetitive tasks and focus on what matters
                 </CardDescription>
               </CardHeader>
-              <CardContent className="relative z-10 pb-6">
-                <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-                  Categorize tasks by status, priority, and deadlines for better focus
+              <CardContent>
+                <p className="text-white/60 text-sm">
+                  Intelligent features that learn from your habits and optimize your workflow
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 overflow-hidden relative h-full">
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <CardHeader className="relative z-10 text-center pb-4">
-                <div className="w-16 h-16 bg-gradient-to-r from-cyan-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-5 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-cyan-500/20">
-                  <Clock className="w-8 h-8 text-white" />
+            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300 hover:transform hover:scale-105 group">
+              <CardHeader>
+                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Award className="w-6 h-6 text-white" />
                 </div>
-                <CardTitle className="text-2xl font-bold text-slate-900 dark:text-white">Boost Productivity</CardTitle>
-                <CardDescription className="text-slate-600 dark:text-slate-300 mt-2">
-                  Focus on what matters
+                <CardTitle className="text-xl font-semibold text-white">Achieve Goals</CardTitle>
+                <CardDescription className="text-white/70">
+                  Track progress and reach your objectives
                 </CardDescription>
               </CardHeader>
-              <CardContent className="relative z-10 pb-6">
-                <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-                  Complete tasks efficiently and effectively with smart insights
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="group hover:shadow-2xl hover:shadow-green-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 overflow-hidden relative h-full">
-              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <CardHeader className="relative z-10 text-center pb-4">
-                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-5 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-green-500/20">
-                  <Calendar className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-2xl font-bold text-slate-900 dark:text-white">Plan Ahead</CardTitle>
-                <CardDescription className="text-slate-600 dark:text-slate-300 mt-2">
-                  Schedule and plan your workflow
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="relative z-10 pb-6">
-                <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-                  Set deadlines and reminders to stay on track with your goals
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="group hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 overflow-hidden relative h-full">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <CardHeader className="relative z-10 text-center pb-4">
-                <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-5 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-orange-500/20">
-                  <BarChart3 className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-2xl font-bold text-slate-900 dark:text-white">Track Progress</CardTitle>
-                <CardDescription className="text-slate-600 dark:text-slate-300 mt-2">
-                  Monitor your productivity
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="relative z-10 pb-6">
-                <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-                  Visualize your progress and identify areas for improvement
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="group hover:shadow-2xl hover:shadow-pink-500/10 transition-all duration-500 hover:-translate-y-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 overflow-hidden relative h-full">
-              <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <CardHeader className="relative z-10 text-center pb-4">
-                <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center mb-5 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-pink-500/20">
-                  <Users className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-2xl font-bold text-slate-900 dark:text-white">Collaborate</CardTitle>
-                <CardDescription className="text-slate-600 dark:text-slate-300 mt-2">
-                  Work with your team
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="relative z-10 pb-6">
-                <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-                  Share tasks and collaborate with teammates for better results
+              <CardContent>
+                <p className="text-white/60 text-sm">
+                  Powerful analytics to help you understand your productivity patterns
                 </p>
               </CardContent>
             </Card>
           </div>
 
-          {/* Call to Action */}
-          <div className="flex flex-col items-center gap-8">
-            <Button
-              size="lg"
-              className="px-12 py-6 text-lg rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105 text-white font-semibold text-xl"
-              onClick={handleGetStarted}
-            >
-              Get Started
-            </Button>
-
-            <div className="flex flex-col sm:flex-row gap-5">
-              <Link href="/login">
-                <Button variant="outline" size="lg" className="px-10 py-5 rounded-xl border-2 hover:bg-blue-50/80 hover:border-blue-200 dark:hover:bg-slate-700/50 dark:hover:border-slate-600 transition-all duration-300 font-medium text-lg">
-                  Log In
-                </Button>
-              </Link>
-              <Link href="/signup">
-                <Button size="lg" className="px-10 py-5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300 text-white font-semibold text-lg">
-                  Sign Up
-                </Button>
-              </Link>
+          {/* CTA Section */}
+          <div className="text-center space-y-6">
+            <div className="max-w-2xl mx-auto">
+              <h2 className="text-3xl font-bold text-white mb-4">Ready to Transform Your Productivity?</h2>
+              <p className="text-white/70 mb-8">
+                Join thousands of users who have revolutionized their workflow with our platform
+              </p>
             </div>
 
-            {/* Stats Section */}
-            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 w-full max-w-4xl">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900 dark:text-white mb-1">50K+</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">Tasks Completed</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900 dark:text-white mb-1">98%</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">User Satisfaction</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900 dark:text-white mb-1">24/7</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">Support Available</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900 dark:text-white mb-1">100%</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">Secure Platform</div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button
+                size="lg"
+                className="px-8 py-4 text-base rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                onClick={handleGetStarted}
+              >
+                Start Free Trial
+              </Button>
+
+              <div className="flex gap-3">
+                <Link href="/login">
+                  <Button variant="outline" size="lg" className="px-6 py-4 rounded-xl border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 font-medium">
+                    Log In
+                  </Button>
+                </Link>
+
+                <Link href="/signup">
+                  <Button variant="secondary" size="lg" className="px-6 py-4 rounded-xl bg-white/10 text-white hover:bg-white/20 border border-white/20 transition-all duration-300 font-medium">
+                    Sign Up
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

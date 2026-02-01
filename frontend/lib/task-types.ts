@@ -18,7 +18,10 @@ export interface Task {
   dependencies?: string[]; // array of task IDs this task depends on
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
-  assignee?: string; // user ID or name
+  assignee?: {
+    name: string;
+    email: string;
+  }; // user object with name and email
 }
 
 // Priority levels with corresponding colors and values

@@ -6,8 +6,8 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import '@/app/tailwind-utils';
 
 export const metadata = {
-  title: 'TaskFlow - Organize Your Life',
-  description: 'A modern todo application to help you organize your life and manage tasks efficiently',
+  title: 'Task Organizer - Organize Your Life',
+  description: 'A modern task organization application to help you organize your life and manage tasks efficiently',
 };
 
 export default function RootLayout({

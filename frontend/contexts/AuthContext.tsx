@@ -65,12 +65,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Update states before redirect to ensure they're ready
       setUser(userData.user);
       setIsAuthenticated(true);
+      setIsLoading(false); // Set loading to false before redirect
 
       // Wait a moment to ensure state updates are propagated before redirect
       await new Promise(resolve => setTimeout(resolve, 100));
 
       // Redirect to tasks page after state update
       router.push('/tasks');
+      router.refresh(); // Force a router refresh to ensure the route updates properly
     } catch (error: any) {
       // If login fails, clear any potentially invalid token
       if (typeof window !== 'undefined') {

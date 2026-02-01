@@ -18,7 +18,7 @@ export function Sidebar({ closeSidebar }: SidebarProps) {
 
   const navItems = [
     {
-      title: 'Dashboard',
+      title: 'Tasks',
       href: '/tasks',
       icon: BarChart3,
     },
@@ -26,11 +26,6 @@ export function Sidebar({ closeSidebar }: SidebarProps) {
       title: 'Add Task',
       href: '#',
       icon: Plus,
-    },
-    {
-      title: 'Settings',
-      href: '/settings',
-      icon: Settings,
     },
   ];
 
@@ -57,31 +52,31 @@ export function Sidebar({ closeSidebar }: SidebarProps) {
   };
 
   return (
-    <div className="flex h-full flex-col bg-background">
+    <div className="flex h-full flex-col bg-gradient-to-b from-slate-900 to-purple-900">
       {/* Logo/Header */}
-      <div className="p-4 border-b border-border/30 bg-muted/20">
+      <div className="p-4 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-gradient-to-r from-primary to-secondary rounded-lg shadow-md">
+          <div className="p-2.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg shadow-lg shadow-blue-500/20">
             <img
               src="/logo.svg"
-              alt="TaskFlow Logo"
+              alt="Productivity Pro Logo"
               width={24}
               height={24}
               className="text-white drop-shadow-sm"
             />
           </div>
           <div className="flex flex-col">
-            <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              TaskFlow
+            <span className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+              Productivity Pro
             </span>
-            <span className="text-xs text-muted-foreground -mt-1 ml-0.5 font-medium">
-              Organize Your Life
+            <span className="text-xs text-white/60 -mt-1 ml-0.5 font-medium">
+              Boost Your Efficiency
             </span>
           </div>
         </div>
       </div>
 
-      <div className="flex-1 space-y-1 py-4 px-2">
+      <div className="flex-1 space-y-1 py-6 px-3">
         <nav className="grid items-start gap-1">
           {navItems.map((item) => {
             const isActive = pathname === item.href || (item.href === '/tasks' && pathname.startsWith('/tasks'));
@@ -94,21 +89,21 @@ export function Sidebar({ closeSidebar }: SidebarProps) {
                 key={item.href}
                 onClick={() => handleNavClick(item.href)}
                 className={cn(
-                  'flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-300 hover:bg-primary/10 hover:text-primary group w-full text-left',
+                  'flex items-center rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 hover:bg-white/10 hover:text-white group w-full text-left',
                   item.href === '#' ?
                     (isAddTaskActive
-                      ? 'bg-primary/10 text-primary border-l-2 border-primary'
-                      : 'text-muted-foreground')
+                      ? 'bg-white/20 text-white'
+                      : 'text-white/70')
                     :
                     (isActive
-                      ? 'bg-primary/10 text-primary border-l-2 border-primary'
-                      : 'text-muted-foreground')
+                      ? 'bg-white/20 text-white'
+                      : 'text-white/70')
                 )}
               >
-                <Icon className="mr-3 h-4 w-4 transition-transform group-hover:scale-110" />
+                <Icon className="mr-3 h-5 w-5 transition-transform group-hover:scale-110" />
                 <span className="flex-1">{item.title}</span>
                 {(isActive || isAddTaskActive) && (
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  <div className="w-2 h-2 bg-white rounded-full"></div>
                 )}
               </button>
             );
@@ -117,7 +112,7 @@ export function Sidebar({ closeSidebar }: SidebarProps) {
       </div>
 
       {/* User Profile Section */}
-      <div className="p-4 border-t border-border/30">
+      <div className="p-4 border-t border-white/10">
         <Link
           href="/profile"
           onClick={() => {
@@ -125,20 +120,20 @@ export function Sidebar({ closeSidebar }: SidebarProps) {
               closeSidebar();
             }
           }}
-          className="flex items-center gap-3 p-3 rounded-lg bg-muted/20 hover:bg-muted/40 transition-colors cursor-pointer mb-2"
+          className="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors cursor-pointer mb-3"
         >
-          <div className="p-2 bg-gradient-to-r from-secondary to-primary rounded-full">
+          <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full">
             <User className="h-4 w-4 text-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">User Profile</p>
-            <p className="text-xs text-muted-foreground truncate">View your profile</p>
+            <p className="text-sm font-medium text-white truncate">User Profile</p>
+            <p className="text-xs text-white/60 truncate">View your profile</p>
           </div>
         </Link>
 
         <Button
           variant="ghost"
-          className="w-full justify-start rounded-lg hover:bg-destructive/10 hover:text-destructive transition-all duration-300"
+          className="w-full justify-start rounded-xl hover:bg-red-500/20 hover:text-red-400 transition-all duration-300 text-white"
           onClick={async () => {
             await api.logout();
             router.push('/login');

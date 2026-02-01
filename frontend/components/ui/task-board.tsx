@@ -175,17 +175,17 @@ export function TaskBoard({
 
       {hasNoFilteredTasks ? (
         <div className="text-center py-16">
-          <div className="mx-auto w-24 h-24 rounded-full bg-muted flex items-center justify-center mb-6">
-            <Filter className="h-12 w-12 text-muted-foreground" />
+          <div className="mx-auto w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center mb-6">
+            <Filter className="h-12 w-12 text-gray-500" />
           </div>
-          <h3 className="text-xl font-semibold text-foreground mb-2">No tasks found</h3>
-          <p className="text-muted-foreground max-w-md mx-auto mb-6">
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">No tasks found</h3>
+          <p className="text-gray-600 max-w-md mx-auto mb-6">
             No tasks match your current filters. Try adjusting your filter criteria to see tasks.
           </p>
           <Button
             variant="outline"
             onClick={clearFilters}
-            className="h-9 px-4"
+            className="h-9 px-4 text-gray-700 border-gray-300 hover:bg-gray-50"
           >
             Clear all filters
           </Button>
@@ -193,14 +193,14 @@ export function TaskBoard({
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* To Do Column */}
-          <div className={`bg-gradient-to-br ${statusConfig.todo.bgGradient} p-4 rounded-xl border ${statusConfig.todo.borderColor}`}>
+          <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
             <Card className="border-0 shadow-none bg-transparent">
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-2">
-                  {React.createElement(statusConfig.todo.icon, { className: `h-5 w-5 ${statusConfig.todo.color}` })}
-                  <CardTitle className="text-lg font-semibold text-foreground">
+                  {React.createElement(statusConfig.todo.icon, { className: `h-5 w-5 ${statusConfig.todo.color.replace('text-', 'text-')}` })}
+                  <CardTitle className="text-lg font-semibold text-gray-800">
                     {statusConfig.todo.title}
-                    <span className="ml-2 text-sm font-normal text-muted-foreground">
+                    <span className="ml-2 text-sm font-normal text-gray-600">
                       ({todoTasks.length})
                     </span>
                   </CardTitle>
@@ -208,7 +208,7 @@ export function TaskBoard({
               </CardHeader>
               <CardContent className="space-y-4">
                 {todoTasks.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
+                  <div className="text-center py-8 text-gray-600">
                     <p className="text-sm">No tasks in this section</p>
                   </div>
                 ) : (
@@ -239,14 +239,14 @@ export function TaskBoard({
           </div>
 
           {/* In Progress Column */}
-          <div className={`bg-gradient-to-br ${statusConfig['in-progress'].bgGradient} p-4 rounded-xl border ${statusConfig['in-progress'].borderColor}`}>
+          <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
             <Card className="border-0 shadow-none bg-transparent">
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-2">
-                  {React.createElement(statusConfig['in-progress'].icon, { className: `h-5 w-5 ${statusConfig['in-progress'].color}` })}
-                  <CardTitle className="text-lg font-semibold text-foreground">
+                  {React.createElement(statusConfig['in-progress'].icon, { className: `h-5 w-5 ${statusConfig['in-progress'].color.replace('text-', 'text-')}` })}
+                  <CardTitle className="text-lg font-semibold text-gray-800">
                     {statusConfig['in-progress'].title}
-                    <span className="ml-2 text-sm font-normal text-muted-foreground">
+                    <span className="ml-2 text-sm font-normal text-gray-600">
                       ({inProgressTasks.length})
                     </span>
                   </CardTitle>
@@ -254,7 +254,7 @@ export function TaskBoard({
               </CardHeader>
               <CardContent className="space-y-4">
                 {inProgressTasks.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
+                  <div className="text-center py-8 text-gray-600">
                     <p className="text-sm">No tasks in this section</p>
                   </div>
                 ) : (
@@ -285,14 +285,14 @@ export function TaskBoard({
           </div>
 
           {/* Completed Column */}
-          <div className={`bg-gradient-to-br ${statusConfig.completed.bgGradient} p-4 rounded-xl border ${statusConfig.completed.borderColor}`}>
+          <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
             <Card className="border-0 shadow-none bg-transparent">
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-2">
-                  {React.createElement(statusConfig.completed.icon, { className: `h-5 w-5 ${statusConfig.completed.color}` })}
-                  <CardTitle className="text-lg font-semibold text-foreground">
+                  {React.createElement(statusConfig.completed.icon, { className: `h-5 w-5 ${statusConfig.completed.color.replace('text-', 'text-')}` })}
+                  <CardTitle className="text-lg font-semibold text-gray-800">
                     {statusConfig.completed.title}
-                    <span className="ml-2 text-sm font-normal text-muted-foreground">
+                    <span className="ml-2 text-sm font-normal text-gray-600">
                       ({completedTasks.length})
                     </span>
                   </CardTitle>
@@ -300,7 +300,7 @@ export function TaskBoard({
               </CardHeader>
               <CardContent className="space-y-4">
                 {completedTasks.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
+                  <div className="text-center py-8 text-gray-600">
                     <p className="text-sm">No tasks in this section</p>
                   </div>
                 ) : (

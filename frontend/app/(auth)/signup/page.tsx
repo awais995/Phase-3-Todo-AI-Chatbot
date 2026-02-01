@@ -77,33 +77,34 @@ export default function SignupPage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-primary/5 to-background p-4 relative overflow-hidden"
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4 relative overflow-hidden"
       role="main"
       aria-label="Signup page"
     >
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-indigo-500/5 rounded-full blur-2xl animate-pulse delay-500"></div>
       </div>
 
       <div className="relative z-10 w-full max-w-md">
-        <Card className="w-full shadow-2xl border-0 bg-background/95 bg-gradient-to-br from-background/90 to-muted/50 shadow-xl shadow-primary/10">
+        <Card className="w-full shadow-2xl border-0 bg-white/5 backdrop-blur-sm border border-white/10">
           <CardHeader className="text-center pb-6">
             {/* Branding section */}
             <div className="flex flex-col items-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center mb-3 shadow-lg">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mb-3 shadow-lg shadow-blue-500/20">
                 <User className="h-8 w-8 text-white" />
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                TaskFlow
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                Productivity Pro
               </h1>
             </div>
 
-            <CardTitle id="signup-title" className="text-3xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent mt-3">
+            <CardTitle id="signup-title" className="text-3xl font-bold text-white mt-3">
               Create Account
             </CardTitle>
-            <CardDescription className="text-muted-foreground mt-2">
+            <CardDescription className="text-white/70 mt-2">
               Join us today and start organizing your tasks
             </CardDescription>
           </CardHeader>
@@ -111,7 +112,7 @@ export default function SignupPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {errors.general && (
                 <div
-                  className="text-destructive text-sm p-3 bg-destructive/10 rounded-lg border border-destructive/20 animate-pulse"
+                  className="text-red-400 text-sm p-3 bg-red-500/20 rounded-lg border border-red-500/30 animate-pulse"
                   role="alert"
                   aria-live="assertive"
                 >
@@ -120,18 +121,18 @@ export default function SignupPage() {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-sm font-medium text-foreground/80">
+                <Label htmlFor="name" className="text-sm font-medium text-white/80">
                   Full Name
                 </Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/60" />
                   <Input
                     id="name"
                     type="text"
                     placeholder="John Doe"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className={`pl-10 h-12 ${errors.name ? 'border-red-500 bg-red-50/50 ring-red-500/20' : 'border-input/50'} transition-all duration-300 focus:ring-2 focus:ring-primary/20 focus:border-primary`}
+                    className={`pl-10 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/50 ${errors.name ? 'border-red-500 bg-red-500/10 ring-red-500/30' : 'border-white/20'} transition-all duration-300 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500`}
                     aria-invalid={!!errors.name}
                     aria-describedby={errors.name ? "name-error" : undefined}
                     disabled={loading}
@@ -140,7 +141,7 @@ export default function SignupPage() {
                 {errors.name && (
                   <p
                     id="name-error"
-                    className="text-destructive text-sm flex items-center gap-1"
+                    className="text-red-400 text-sm flex items-center gap-1"
                     role="alert"
                     aria-live="assertive"
                   >
@@ -150,18 +151,18 @@ export default function SignupPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-foreground/80">
+                <Label htmlFor="email" className="text-sm font-medium text-white/80">
                   Email Address
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/60" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="name@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={`pl-10 h-12 ${errors.email ? 'border-red-500 bg-red-50/50 ring-red-500/20' : 'border-input/50'} transition-all duration-300 focus:ring-2 focus:ring-primary/20 focus:border-primary`}
+                    className={`pl-10 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/50 ${errors.email ? 'border-red-500 bg-red-500/10 ring-red-500/30' : 'border-white/20'} transition-all duration-300 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500`}
                     aria-invalid={!!errors.email}
                     aria-describedby={errors.email ? "email-error" : undefined}
                     disabled={loading}
@@ -170,7 +171,7 @@ export default function SignupPage() {
                 {errors.email && (
                   <p
                     id="email-error"
-                    className="text-destructive text-sm flex items-center gap-1"
+                    className="text-red-400 text-sm flex items-center gap-1"
                     role="alert"
                     aria-live="assertive"
                   >
@@ -180,18 +181,18 @@ export default function SignupPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-foreground/80">
+                <Label htmlFor="password" className="text-sm font-medium text-white/80">
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/60" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className={`pl-10 pr-10 h-12 ${errors.password ? 'border-red-500 bg-red-50/50 ring-red-500/20' : 'border-input/50'} transition-all duration-300 focus:ring-2 focus:ring-primary/20 focus:border-primary`}
+                    className={`pl-10 pr-10 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/50 ${errors.password ? 'border-red-500 bg-red-500/10 ring-red-500/30' : 'border-white/20'} transition-all duration-300 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500`}
                     aria-invalid={!!errors.password}
                     aria-describedby={errors.password ? "password-error" : undefined}
                     disabled={loading}
@@ -204,16 +205,16 @@ export default function SignupPage() {
                     disabled={loading}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground hover:text-foreground transition-colors" aria-hidden="true" />
+                      <EyeOff className="h-4 w-4 text-white/60 hover:text-white/80 transition-colors" aria-hidden="true" />
                     ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground hover:text-foreground transition-colors" aria-hidden="true" />
+                      <Eye className="h-4 w-4 text-white/60 hover:text-white/80 transition-colors" aria-hidden="true" />
                     )}
                   </button>
                 </div>
                 {errors.password && (
                   <p
                     id="password-error"
-                    className="text-destructive text-sm flex items-center gap-1"
+                    className="text-red-400 text-sm flex items-center gap-1"
                     role="alert"
                     aria-live="assertive"
                   >
@@ -223,18 +224,18 @@ export default function SignupPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-sm font-medium text-foreground/80">
+                <Label htmlFor="confirmPassword" className="text-sm font-medium text-white/80">
                   Confirm Password
                 </Label>
                 <div className="relative">
-                  <CheckCircle className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <CheckCircle className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/60" />
                   <Input
                     id="confirmPassword"
                     type="password"
                     placeholder="••••••••"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className={`pl-10 h-12 ${errors.confirmPassword ? 'border-red-500 bg-red-50/50 ring-red-500/20' : 'border-input/50'} transition-all duration-300 focus:ring-2 focus:ring-primary/20 focus:border-primary`}
+                    className={`pl-10 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/50 ${errors.confirmPassword ? 'border-red-500 bg-red-500/10 ring-red-500/30' : 'border-white/20'} transition-all duration-300 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500`}
                     aria-invalid={!!errors.confirmPassword}
                     aria-describedby={errors.confirmPassword ? "confirm-password-error" : undefined}
                     disabled={loading}
@@ -243,7 +244,7 @@ export default function SignupPage() {
                 {errors.confirmPassword && (
                   <p
                     id="confirm-password-error"
-                    className="text-destructive text-sm flex items-center gap-1"
+                    className="text-red-400 text-sm flex items-center gap-1"
                     role="alert"
                     aria-live="assertive"
                   >
@@ -259,17 +260,17 @@ export default function SignupPage() {
                     id="terms"
                     checked={agreedToTerms}
                     onChange={(e) => setAgreedToTerms(e.target.checked)}
-                    className={`mt-1 h-4 w-4 rounded border-input text-primary focus:ring-primary ${errors.terms ? 'border-red-500' : ''}`}
+                    className={`mt-1 h-4 w-4 rounded border-white/30 text-blue-500 focus:ring-blue-500 bg-white/10 ${errors.terms ? 'border-red-500' : ''}`}
                     disabled={loading}
                   />
-                  <Label htmlFor="terms" className="text-sm text-foreground/80 leading-5">
-                    I agree to the <a href="#" className="text-primary hover:underline">Terms of Service</a> and <a href="#" className="text-primary hover:underline">Privacy Policy</a>
+                  <Label htmlFor="terms" className="text-sm text-white/70 leading-5">
+                    I agree to the <a href="#" className="text-blue-400 hover:underline">Terms of Service</a> and <a href="#" className="text-blue-400 hover:underline">Privacy Policy</a>
                   </Label>
                 </div>
                 {errors.terms && (
                   <p
                     id="terms-error"
-                    className="text-destructive text-sm flex items-center gap-1"
+                    className="text-red-400 text-sm flex items-center gap-1"
                     role="alert"
                     aria-live="assertive"
                   >
@@ -280,7 +281,7 @@ export default function SignupPage() {
 
               <Button
                 type="submit"
-                className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 transition-all duration-300 group"
+                className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300 group text-white shadow-lg hover:shadow-2xl shadow-blue-500/20"
                 disabled={loading}
                 aria-busy={loading}
               >
@@ -301,11 +302,11 @@ export default function SignupPage() {
               </Button>
             </form>
 
-            <div className="mt-6 text-center text-sm text-muted-foreground">
+            <div className="mt-6 text-center text-sm text-white/70">
               Already have an account?{' '}
               <Link
                 href="/login"
-                className="text-primary hover:text-primary/80 hover:underline font-medium transition-colors"
+                className="text-blue-400 hover:text-blue-300 hover:underline font-medium transition-colors"
                 aria-label="Sign in to your existing account"
               >
                 Sign in

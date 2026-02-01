@@ -4,15 +4,13 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
-import { TaskBoard } from '@/components/ui/task-board';
-import { TaskForm } from '@/components/ui/task-form';
+import { ModernTaskBoard } from '@/components/ui/modern-task-board';
+import { ModernTaskForm } from '@/components/ui/modern-task-form';
 import { Button } from '@/components/ui/button';
-import { Plus, Calendar, BarChart3, Sparkles } from 'lucide-react';
-import { Navbar } from '@/components/navbar';
-import { Sidebar } from '@/components/sidebar';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
-
+import { Plus, Calendar, BarChart3, Sparkles, TrendingUp, Target, CheckCircle, Clock, Activity, Layers } from 'lucide-react';
 import { Task } from '@/lib/task-types';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 export default function TasksContent() {
   const router = useRouter();
@@ -366,7 +364,7 @@ export default function TasksContent() {
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter(task => task.completed).length;
   const pendingTasks = tasks.filter(task => !task.completed).length;
-
+  const inProgressTasks = tasks.filter(task => task.status === 'in-progress').length;
 
   // If still authenticating, show loading
   // if (authIsLoading) {
@@ -382,9 +380,9 @@ export default function TasksContent() {
   // If not authenticated and not loading, redirect will happen via useEffect
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
         <div className="text-center">
-          <p className="text-lg">Redirecting to login...</p>
+          <p className="text-lg text-white">Redirecting to login...</p>
         </div>
       </div>
     );
@@ -393,151 +391,150 @@ export default function TasksContent() {
   // Show loading spinner while loading tasks
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
         <div className="text-center">
-          <p className="text-lg">Loading your tasks...</p>
+          <p className="text-lg text-white">Loading your tasks...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/5 to-background">
-      <Navbar />
-
-      <div className="flex">
-        {/* Desktop Sidebar */}
-        <aside
-          className="hidden md:block w-64 border-r bg-background p-4 h-[calc(100vh-4rem)] sticky top-16"
-          role="navigation"
-          aria-label="Main navigation"
-        >
-          <Sidebar />
-        </aside>
-
-        {/* Mobile Sidebar Sheet */}
-        <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-          <SheetContent
-            side="left"
-            className="w-64 p-0 bg-background border-r border-border shadow-2xl"
-            role="navigation"
-            aria-label="Mobile navigation"
-          >
-            <Sidebar closeSidebar={() => setSidebarOpen(false)} />
-          </SheetContent>
-        </Sheet>
-
-        {/* Main Content */}
-        <main
-          ref={mainContentRef}
-          onKeyDown={handleKeyDown}
-          tabIndex={-1}
-          className="flex-1 md:ml-0"
-        >
-          <div className="container mx-auto py-8 px-4">
-            {/* Header Section */}
-            <div className="mb-8">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-                <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-                    My Tasks
-                  </h1>
-                  <p className="text-muted-foreground mt-1">
-                    Stay organized and productive
-                  </p>
-                </div>
-                <Button
-                  onClick={() => setShowTaskForm(true)}
-                  className="h-11 px-6 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 transition-all duration-300 group"
-                  aria-label="Add new task"
-                  disabled={loading || !user?.id}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Task
-                  <Sparkles className="h-4 w-4 ml-2 transition-transform group-hover:rotate-12" />
-                </Button>
-              </div>
-
-              {/* Stats Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                <div className="bg-gradient-to-br from-card to-muted/30 p-5 rounded-xl border border-border/50">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">Total Tasks</p>
-                      <p className="text-2xl font-bold">{totalTasks}</p>
-                    </div>
-                    <div className="p-3 bg-primary/10 rounded-lg">
-                      <BarChart3 className="h-5 w-5 text-primary" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-card to-muted/30 p-5 rounded-xl border border-border/50">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">Completed</p>
-                      <p className="text-2xl font-bold text-green-600">{completedTasks}</p>
-                    </div>
-                    <div className="p-3 bg-green-500/10 rounded-lg">
-                      <Calendar className="h-5 w-5 text-green-600" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-card to-muted/30 p-5 rounded-xl border border-border/50">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">Pending</p>
-                      <p className="text-2xl font-bold text-orange-600">{pendingTasks}</p>
-                    </div>
-                    <div className="p-3 bg-orange-500/10 rounded-lg">
-                      <Calendar className="h-5 w-5 text-orange-600" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-card to-muted/30 p-5 rounded-xl border border-border/50">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">To Do</p>
-                      <p className="text-2xl font-bold text-blue-600">{pendingTasks}</p>
-                    </div>
-                    <div className="p-3 bg-blue-500/10 rounded-lg">
-                      <Calendar className="h-5 w-5 text-blue-600" />
-                    </div>
-                  </div>
-                </div>
-              </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+      <div className="max-w-7xl mx-auto py-8">
+        {/* Header Section */}
+        <div className="mb-10">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
+            <div>
+              <h1 className="text-4xl font-bold text-white mb-2">
+                Productivity Dashboard
+              </h1>
+              <p className="text-white/70 text-lg">
+                Manage your tasks and boost your productivity
+              </p>
             </div>
-
-            {/* Task Board */}
-            <TaskBoard
-              tasks={tasks}
-              loading={loading}
-              onEdit={handleEditTask}
-              onDelete={handleDeleteTask}
-              onToggle={handleToggleTask}
-              onStatusChange={handleStatusChange}
-              onPriorityChange={handlePriorityChange}
-              onAddTask={() => setShowTaskForm(true)}
-              filter={filter}
-              onFilterChange={handleFilterChange}
-            />
-
-            <TaskForm
-              open={showTaskForm}
-              onOpenChange={(open) => {
-                setShowTaskForm(open);
-                if (!open) {
-                  setEditingTask(null);
-                }
-              }}
-              task={editingTask || undefined}
-              onSubmit={editingTask ? handleUpdateTask : handleCreateTask}
-              loading={isSubmitting}
-            />
+            <Button
+              onClick={() => setShowTaskForm(true)}
+              className="h-14 px-8 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300 group text-white shadow-lg hover:shadow-2xl rounded-xl"
+              aria-label="Add new task"
+              disabled={loading || !user?.id}
+            >
+              <Plus className="h-5 w-5 mr-3" />
+              <span className="text-lg font-semibold">Add Task</span>
+              <Sparkles className="h-5 w-5 ml-3 transition-transform group-hover:rotate-12" />
+            </Button>
           </div>
-        </main>
+
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-white/60 text-sm font-medium">Total Tasks</p>
+                    <p className="text-3xl font-bold text-white mt-1">{totalTasks}</p>
+                  </div>
+                  <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl">
+                    <Layers className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="flex items-center text-sm text-green-400">
+                    <TrendingUp className="h-4 w-4 mr-1" />
+                    <span>+12% from last week</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-white/60 text-sm font-medium">Completed</p>
+                    <p className="text-3xl font-bold text-white mt-1">{completedTasks}</p>
+                  </div>
+                  <div className="p-3 bg-gradient-to-r from-green-500 to-green-600 rounded-xl">
+                    <CheckCircle className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="flex items-center text-sm text-green-400">
+                    <TrendingUp className="h-4 w-4 mr-1" />
+                    <span>+8% from last week</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-white/60 text-sm font-medium">In Progress</p>
+                    <p className="text-3xl font-bold text-white mt-1">{inProgressTasks}</p>
+                  </div>
+                  <div className="p-3 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl">
+                    <Activity className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="flex items-center text-sm text-orange-400">
+                    <TrendingUp className="h-4 w-4 mr-1" />
+                    <span>+3% from last week</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-white/60 text-sm font-medium">Pending</p>
+                    <p className="text-3xl font-bold text-white mt-1">{pendingTasks}</p>
+                  </div>
+                  <div className="p-3 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl">
+                    <Target className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="flex items-center text-sm text-purple-400">
+                    <TrendingUp className="h-4 w-4 mr-1" />
+                    <span>+5% from last week</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Task Board */}
+        <ModernTaskBoard
+          tasks={tasks}
+          loading={loading}
+          onEdit={handleEditTask}
+          onDelete={handleDeleteTask}
+          onToggle={handleToggleTask}
+          onStatusChange={handleStatusChange}
+          onPriorityChange={handlePriorityChange}
+          onAddTask={() => setShowTaskForm(true)}
+          filter={filter}
+          onFilterChange={handleFilterChange}
+        />
+
+        <ModernTaskForm
+          open={showTaskForm}
+          onOpenChange={(open) => {
+            setShowTaskForm(open);
+            if (!open) {
+              setEditingTask(null);
+            }
+          }}
+          task={editingTask || undefined}
+          onSubmit={editingTask ? handleUpdateTask : handleCreateTask}
+          loading={isSubmitting}
+        />
       </div>
     </div>
   );
