@@ -1,80 +1,54 @@
-<!-- SYNC IMPACT REPORT:
-Version change: 1.0.0 → 1.0.1
-Modified principles: [PRINCIPLE_1_NAME] → Phase 2 Full-Stack Web Application
-Added sections: Technology Stack, API Requirements, Security Requirements, Development Workflow
+<!-- 
+SYNC IMPACT REPORT
+Version change: 1.0.0 → 3.0.0
+List of modified principles: 
+- PRINCIPLE_1_NAME: Generic → Agentic Dev Stack Process
+- PRINCIPLE_2_NAME: Generic → Spec-Kit Plus Compliance
+- PRINCIPLE_3_NAME: Generic → Tech Stack Adherence
+- PRINCIPLE_4_NAME: Generic → Security First
+- PRINCIPLE_5_NAME: Generic → AI-Powered Task Management
+- PRINCIPLE_6_NAME: Generic → Persistent Conversations
+Added sections: None
 Removed sections: None
-Templates requiring updates: ✅ Updated / ⚠ pending: .specify/templates/plan-template.md, .specify/templates/spec-template.md, .specify/templates/tasks-template.md
-Follow-up TODOs: None
+Templates requiring updates: 
+- ✅ plan-template.md - Constitution Check section aligns with new principles
+- ✅ spec-template.md - Requirements section aligns with new principles
+- ✅ tasks-template.md - Task categorization reflects new principle-driven task types
+Follow-up TODOs: 
+- RATIFICATION_DATE still needs to be determined and updated
 -->
 # hackathon-todo Constitution
 
 ## Core Principles
 
-### Phase 2 Full-Stack Web Application
-Development of a multi-user full-stack web application with persistent storage and JWT-based authentication. Follow Agentic Dev Stack workflow strictly: Write/Update Spec → Generate Plan → Break into Tasks → Implement via Claude Code. No manual coding allowed. All development must reference specs with @specs/... and read relevant CLAUDE.md files before any action.
+### Agentic Dev Stack Process
+Strictly adhere to the Agentic Dev Stack process: Write/Update Spec → Create Plan → Split into Tasks → Implement using Claude Code. Manual coding is prohibited.
 
-### Monorepo Structure
-Maintain a clear monorepo structure with frontend/, backend/, specs/, .spec-kit/config.yaml, and docker-compose.yml directories. All components must be organized within this structure with clear separation of concerns between frontend and backend code.
+### Spec-Kit Plus Compliance
+Always utilize Spec-Kit Plus: Refer to specifications using @specs/... paths (example: @specs/features/chatbot.md)
 
-### Technology Stack Compliance
-Use the specified technology stack exactly: Frontend - Next.js 16+ (App Router), TypeScript, Tailwind CSS, shadcn/ui; Backend - FastAPI, SQLModel, Neon Serverless PostgreSQL; Auth - Better Auth with JWT (shared secret BETTER_AUTH_SECRET); Database - Use DATABASE_URL env var.
+### Tech Stack Adherence
+Mandatory technology stack must be followed precisely: Frontend: Next.js 16+ App Router, TypeScript, Tailwind CSS, shadcn/ui; Backend: Python FastAPI; AI Layer: Cohere API; MCP Server: Custom stateless FastAPI endpoints; ORM: SQLModel; Database: Neon Serverless PostgreSQL; Auth: Better Auth using JWT
 
-### Security-First Development
-Enforce user isolation on EVERY operation: user_id from token MUST match {user_id} in path. Return 401 if no/invalid token, 403 if user mismatch. All endpoints require JWT: Authorization: Bearer <token>. Prioritize security over convenience in all implementation decisions.
+### Security First
+Every operation requires valid JWT authorization; enforce strict user isolation on all operations: user_id extracted from token must exactly match the {user_id} in the URL path or tool parameters
 
-### API Contract Adherence
-Implement API endpoints exactly as specified: GET /api/{user_id}/tasks (list, query params: status, sort), POST /api/{user_id}/tasks (create: title required, description optional), GET /api/{user_id}/tasks/{id} (details), PUT /api/{user_id}/tasks/{id} (update), DELETE /api/{user_id}/tasks/{id} (delete), PATCH /api/{user_id}/tasks/{id}/complete (toggle). Any deviation must be explicitly approved.
+### AI-Powered Task Management
+Use Cohere Agent for natural language interpretation and tool/function calling to manage tasks conversationally through natural language input
 
-### Type Safety and Validation
-Use TypeScript and Pydantic models for strict type safety and validation throughout the application. All frontend components should use server components by default, with 'use client' only when needed. All backend endpoints should use Pydantic models for request/response validation with strict validation.
+### Persistent Conversations
+Conversation state saved in DB (conversations + messages tables); stateless server with DB as single source of truth
 
-## Technology Stack Requirements
+## Phase 3 Database Requirements
 
-- Frontend: Next.js 16+ (App Router), TypeScript, Tailwind CSS, shadcn/ui
-- Backend: FastAPI, SQLModel, Neon Serverless PostgreSQL
-- Auth: Better Auth with JWT (shared secret BETTER_AUTH_SECRET)
-- Database: Use DATABASE_URL env var
-- Additional: Docker for containerization, docker-compose.yml for orchestration
-
-## API Requirements
-
-All API endpoints must follow the exact specifications:
-- GET /api/{user_id}/tasks - List tasks with query params: status, sort
-- POST /api/{user_id}/tasks - Create task (title required, description optional)
-- GET /api/{user_id}/tasks/{id} - Get task details
-- PUT /api/{user_id}/tasks/{id} - Update task
-- DELETE /api/{user_id}/tasks/{id} - Delete task
-- PATCH /api/{user_id}/tasks/{id}/complete - Toggle task completion
-
-Database schema for tasks table:
-- id: int PK
-- user_id: str FK to users.id
-- title: str NOT NULL
-- description: text NULL
-- completed: bool default false
-- created_at, updated_at: timestamp
-
-Users table managed by Better Auth: id (str PK), email, name, created_at
-
-## Security Requirements
-
-- User isolation enforcement: user_id from token must match {user_id} in path for all operations
-- JWT authentication required for all endpoints
-- Return 401 for no/invalid token, 403 for user mismatch
-- Use BETTER_AUTH_SECRET for JWT verification
-- All API calls must include Authorization: Bearer <token> header
-- Frontend must handle authentication state properly
+New Phase 3 database tables: conversations table with user_id, id, created_at, updated_at; messages table with user_id, id, conversation_id, role, content, created_at
 
 ## Development Workflow
 
-- Always use Spec-Kit Plus: Reference specs with @specs/... (e.g., @specs/features/task-crud.md)
-- Read relevant CLAUDE.md files before any action: Root CLAUDE.md, frontend/CLAUDE.md, backend/CLAUDE.md
-- Output format: Always show plan → tasks → implementation steps with file paths
-- Prioritize: Security → Type Safety → Responsiveness → Accessibility
-- Use server components by default (frontend), Pydantic + HTTPException (backend)
+Use Cohere Chat API with tool/function calling support; retrieve and store full conversation history from DB on each request; reuse existing Phase 2 backend endpoints for actual task CRUD operations; refer to @specs/... files for detailed requirements
 
 ## Governance
 
-All development must comply with these constitutional principles. Any deviation from the specified technology stack, API contracts, or security requirements must be explicitly approved by the user. All pull requests and code reviews must verify compliance with these principles. The constitution supersedes all other development practices and guidelines.
+Constitution governs all Phase 3 development activities; any departure requires explicit user approval; all Phase 2 rules continue to apply unless clearly superseded
 
-**Version**: 1.0.1 | **Ratified**: 2026-01-04 | **Last Amended**: 2026-01-04
+**Version**: 3.0.0 | **Ratified**: TODO(RATIFICATION_DATE): Original adoption date unknown | **Last Amended**: 2026-02-10

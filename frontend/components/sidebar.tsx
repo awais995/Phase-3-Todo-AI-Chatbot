@@ -1,6 +1,6 @@
 'use client';
 
-import { Home, Plus, Settings, LogOut, Calendar, BarChart3, User } from 'lucide-react';
+import { Home, Plus, Settings, LogOut, Calendar, BarChart3, User, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -37,8 +37,13 @@ export function Sidebar({ closeSidebar }: SidebarProps) {
       window.dispatchEvent(new CustomEvent('open-add-task'));
       closeSidebar();
     } else if (href === '/tasks') {
-      // For the "Dashboard" option, just navigate to the tasks page
+      // For the "Tasks" option, just navigate to the tasks page
       router.push('/tasks');
+      closeSidebar();
+    } else if (href === '/chat') {
+      // For the "AI Assistant" option, navigate to the chat page
+      // Redirect to the dynamic route that will handle user authentication
+      router.push('/chat/me');
       closeSidebar();
     } else if (href === '/settings') {
       // For the "Settings" option, navigate to the settings page

@@ -69,6 +69,25 @@ export default function TasksContent() {
     };
   }, []);
 
+  // Listen for the custom event to refresh tasks when they are changed via chatbot
+  useEffect(() => {
+    const handleRefreshTasks = (event: CustomEvent) => {
+      if (event.detail.userId === user?.id) {
+        // Reset the fetchCalledRef to allow refetching
+        fetchCalledRef.current = false;
+        // Set loading to true before fetching to ensure proper loading state
+        setLoading(true);
+        fetchTasks(user?.id);
+      }
+    };
+
+    window.addEventListener('tasks-changed', handleRefreshTasks as EventListener);
+
+    return () => {
+      window.removeEventListener('tasks-changed', handleRefreshTasks as EventListener);
+    };
+  }, [user?.id]); // Add user.id as dependency to ensure the listener updates when user changes
+
 
   const fetchTasks = async (userId: string) => {
     if (!userId) {

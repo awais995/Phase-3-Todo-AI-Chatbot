@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes.tasks import router as tasks
 from routes.auth import router as auth
+from routes.chat import router as chat
 from contextlib import asynccontextmanager
 from sqlmodel import SQLModel
 from db import engine
@@ -31,9 +32,10 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all headers
 )
 
-# Include the auth and tasks routers
+# Include the auth, tasks, and chat routers
 app.include_router(auth)
 app.include_router(tasks)
+app.include_router(chat)
 
 @app.get("/")
 def read_root():

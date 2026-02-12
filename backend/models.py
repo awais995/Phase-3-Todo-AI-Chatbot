@@ -26,6 +26,45 @@ class Task(TaskBase, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
+# Conversation model
+class ConversationBase(SQLModel):
+    user_id: str
+
+class Conversation(ConversationBase, table=True):
+    """
+    Represents a single conversation thread with metadata.
+    """
+    __tablename__ = "conversations"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: str = Field(index=True)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+# Message model
+class RoleType(str, enum.Enum):
+    user = "user"
+    assistant = "assistant"
+
+class MessageBase(SQLModel):
+    user_id: str
+    conversation_id: int
+    role: RoleType
+    content: str
+
+class Message(MessageBase, table=True):
+    """
+    Represents individual messages within a conversation.
+    """
+    __tablename__ = "messages"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: str = Field(index=True)
+    conversation_id: int = Field(index=True)  # Foreign key reference added in alembic migration
+    role: RoleType
+    content: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
 # Pydantic models for API requests/responses
 from pydantic import BaseModel
 

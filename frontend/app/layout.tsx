@@ -4,6 +4,7 @@ import { Toaster } from 'sonner';
 import { AuthProvider } from '@/contexts/AuthContext';
 // Import this to ensure all Tailwind classes are processed
 import '@/app/tailwind-utils';
+import FloatingChatWidget from '@/components/FloatingChatWidget';
 
 export const metadata = {
   title: 'Task Organizer - Organize Your Life',
@@ -17,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen bg-background font-sans antialiased">
+      <body className="min-h-screen bg-background font-sans antialiased" suppressHydrationWarning>
         <AuthProvider>
           <ThemeProvider
             attribute="class"
@@ -26,6 +27,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <FloatingChatWidget />
             <Toaster richColors />
           </ThemeProvider>
         </AuthProvider>

@@ -1,0 +1,93 @@
+openapi: 3.0.1
+info:
+  title: Todo AI Chatbot API
+  description: API for the AI-powered chatbot that manages tasks through natural language
+  version: 1.0.0
+paths:
+  /api/{user_id}/chat:
+    post:
+      summary: Process natural language input and return AI-generated response
+      description: |
+        Stateless endpoint that processes natural language input from users and returns AI-generated responses.
+        The endpoint loads conversation history from the database, processes the user's message with Cohere,
+        executes any required tools, and saves the conversation to the database.
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the authenticated user
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer token for authentication
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: The user's natural language message
+                  example: "Add a task to buy groceries tomorrow"
+                conversation_id:
+                  type: integer
+                  description: The ID of the conversation (null for new conversation)
+                  example: 123
+              required:
+                - message
+      responses:
+        '200':
+          description: Successful response from the AI chatbot
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  conversation_id:
+                    type: integer
+                    description: The ID of the conversation
+                    example: 123
+                  response:
+                    type: string
+                    description: The AI-generated response
+                    example: "Got it — I've added the task 'buy groceries' for tomorrow. What's next?"
+                  tool_calls:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: The name of the tool called
+                          example: "add_task"
+                        arguments:
+                          type: object
+                          description: The arguments passed to the tool
+                          example:
+                            user_id: "user123"
+                            title: "buy groceries"
+                            description: "Get milk, bread, and eggs"
+                required:
+                  - conversation_id
+                  - response
+                  - tool_calls
+        '401':
+          description: Unauthorized - invalid or missing token
+        '403':
+          description: Forbidden - user_id in token does not match path parameter
+        '500':
+          description: Internal server error
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
