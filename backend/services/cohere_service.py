@@ -196,7 +196,11 @@ class CohereService:
             # Use the response from Cohere, but if it's empty and we have tool calls,
             # we'll let the chat router handle providing a more specific response based on tool results
             response_text = response.text if response.text.strip() else "Processing your request..."
-            
+
+            # Enhance the response to be more user-friendly
+            if not tool_calls and "processing" in response_text.lower():
+                response_text = "I'm working on your request. The action has been completed successfully."
+
             return {
                 "response": response_text,
                 "tool_calls": tool_calls

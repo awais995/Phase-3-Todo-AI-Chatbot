@@ -202,39 +202,6 @@ async def chat(
                                 result["response"] = tool_result["message"]
                                 should_execute_tool = False  # Don't execute the tool
 
-                    # Map 'task' to 'task_id' if 'task_id' is not present but 'task' is numeric
-                    if 'task' in processed_arguments and 'task_id' not in processed_arguments:
-                        # If 'task' looks like a numeric ID, convert it
-                        try:
-                            task_id = int(processed_arguments['task'])
-                            processed_arguments['task_id'] = task_id
-                            processed_arguments.pop('task')
-                        except (ValueError, TypeError):
-                            # If it's not numeric, treat it as a title and try to find the task
-                            task_query = select(Task).where(
-                                Task.user_id == user_id,
-                                Task.title == processed_arguments['task']
-                            )
-                            found_task = session.exec(task_query).first()
-
-                            if found_task:
-                                processed_arguments['task_id'] = found_task.id
-                                processed_arguments.pop('task')
-                            else:
-                                # If we can't find the task by title, return an error message
-                                tool_result = {
-                                    "success": False,
-                                    "error": f"Could not find a task with the name '{processed_arguments['task']}'.",
-                                    "message": f"Could not find a task with the name '{processed_arguments['task']}'. Please check the task name and try again."
-                                }
-                                tool_results.append({
-                                    "name": tool_name,
-                                    "result": tool_result
-                                })
-                                # Update the response with the error message
-                                result["response"] = tool_result["message"]
-                                should_execute_tool = False  # Don't execute the tool
-
                 # Special handling for complete_task to map 'task' or 'task_title' to 'task_id'
                 if tool_name == "complete_task":
                     # Map 'id' to 'task_id' if 'task_id' is not present
@@ -340,6 +307,8 @@ async def chat(
                     # Handle tool execution errors
                     error_response = f"Error executing tool {tool_name}: {str(e)}"
                     result["response"] = error_response
+                    # Log the error for debugging purposes
+                    print(f"Tool execution error: {str(e)}")
         
         # Create assistant message with the response
         assistant_message_entry = Message(
