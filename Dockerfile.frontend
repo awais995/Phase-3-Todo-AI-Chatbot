@@ -1,0 +1,26 @@
+# Use official Node runtime as the base image
+FROM node:18-alpine
+
+# Set environment variables
+ENV NODE_ENV=production
+
+# Set the working directory
+WORKDIR /app
+
+# Copy package.json and install dependencies
+COPY frontend/package.json .
+COPY frontend/package-lock.json .
+
+RUN npm ci --only=production
+
+# Copy the rest of the frontend application
+COPY frontend/ .
+
+# Build the Next.js application
+RUN npm run build
+
+# Expose the port the app runs on
+EXPOSE 3000
+
+# Start the Next.js application
+CMD ["npm", "start"]
